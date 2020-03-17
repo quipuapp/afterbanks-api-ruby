@@ -1,0 +1,40 @@
+version: 2.1
+
+executors:
+  gem-executor:
+    working_directory: ~/tmp/gem
+    docker:
+      - image: circleci/ruby:2.4.1
+    environment:
+      TZ: "Europe/Madrid"
+
+jobs:
+  build-test-gem:
+    executor: gem-executor
+    steps:
+      - checkout
+
+      - run:
+          name: Update bundler
+          command: gem install bundler
+
+      - restore_cache:
+          keys:
+            - flanks-api-ruby-bundle-v2-{{ checksum "Gemfile.lock" }}
+            - flanks-api-ruby-bundle-v2-
+
+      - run: bundle install
+
+      - save_cache:
+          key: flanks-api-ruby-bundle-v2-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+      - run:
+          name: Run rspec
+          command: bundle exec rspec spec/
+
+workflows:
+  build-test-gem:
+    jobs:
+      - build-test-gem
