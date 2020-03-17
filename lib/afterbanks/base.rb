@@ -31,7 +31,6 @@ module Afterbanks
 
       begin
         response = RestClient::Request.execute(request_params)
-        p response
 
         JSON.parse(response)
       rescue StandardError => error

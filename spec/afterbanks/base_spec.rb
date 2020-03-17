@@ -23,36 +23,32 @@ describe Afterbanks do
     }
 
     before do
-      allow(RestClient::Request).to receive(:execute) { {} }
+      allow(RestClient::Request).to receive(:execute) { "{}" }
     end
 
     context "for a GET request" do
       let(:method) { :get }
 
-      context "with a bearer token" do
-        let(:token) { 'tok123456789' }
+      it "works" do
+        expect(subject)
+          .to receive(:log_request)
+          .with(
+            :get,
+            "https://api.afterbanks.com/V3/some/endpoint",
+            { a: :b, c: :d, e: :f }
+          )
 
-        it "works" do
-          expect(subject)
-            .to receive(:log_request)
-            .with(
-              :get,
-              "https://api.afterbanks.com/V3/some/endpoint",
-              { a: :b, c: :d, e: :f }
-            )
+        expect(RestClient::Request)
+          .to receive(:execute)
+          .with(
+            method: :get,
+            url: "https://api.afterbanks.com/V3/some/endpoint",
+            headers: {
+              params: { a: :b, c: :d, e: :f }
+            }
+          )
 
-          expect(RestClient::Request)
-            .to receive(:execute)
-            .with(
-              method: :get,
-              url: "https://api.afterbanks.com/V3/some/endpoint",
-              headers: {
-                params: { a: :b, c: :d, e: :f }
-              }
-            )
-
-          api_call
-        end
+        api_call
       end
     end
 
