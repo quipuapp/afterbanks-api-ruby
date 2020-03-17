@@ -35,6 +35,7 @@ module Afterbanks
         JSON.parse(response)
       rescue StandardError => error
         # TODO handle properly
+        byebug
         response = JSON.parse(error.response)
         raise Error.new(response['error'])
       end

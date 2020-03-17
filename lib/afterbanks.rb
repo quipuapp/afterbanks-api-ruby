@@ -6,3 +6,4 @@ require 'afterbanks/resource'
 require 'afterbanks/collection'
 
 require 'afterbanks/resources/bank'
+require 'afterbanks/resources/transaction'
