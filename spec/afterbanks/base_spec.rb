@@ -1,8 +1,6 @@
 require "spec_helper"
 
 describe Afterbanks do
-  before { configure_afterbanks }
-
   describe "#configuration" do
     it "returns a Configuration instance" do
       expect(subject.configuration).to be_a(Afterbanks::Configuration)
@@ -22,20 +20,26 @@ describe Afterbanks do
       subject.api_call(method: method, path: path, params: params)
     }
 
-    before do
-      allow(RestClient::Request).to receive(:execute) { "{}" }
-    end
-
     context "for a GET request" do
       let(:method) { :get }
+
+      before do
+        stub_request(:get, "https://api.afterbanks.com/V3/some/endpoint?a=b&c=d&e=f").
+          to_return(
+            status: 200,
+            body: "{}",
+            headers: { debug_id: 'abcd' }
+          )
+      end
 
       it "works" do
         expect(subject)
           .to receive(:log_request)
           .with(
-            :get,
-            "https://api.afterbanks.com/V3/some/endpoint",
-            { a: :b, c: :d, e: :f }
+            method: :get,
+            url: "https://api.afterbanks.com/V3/some/endpoint",
+            params: { a: :b, c: :d, e: :f },
+            debug_id: 'abcd'
           )
 
         expect(RestClient::Request)
@@ -47,6 +51,7 @@ describe Afterbanks do
               params: { a: :b, c: :d, e: :f }
             }
           )
+          .and_call_original
 
         api_call
       end
@@ -55,13 +60,30 @@ describe Afterbanks do
     context "for a POST request" do
       let(:method) { :post }
 
+      before do
+        stub_request(:post, "https://api.afterbanks.com/V3/some/endpoint")
+          .with(
+            body: {
+              "a"=>"b",
+              "c"=>"d",
+              "e"=>"f"
+            }
+          )
+          .to_return(
+            status: 200,
+            body: "{}",
+            headers: { debug_id: 'abcd' }
+          )
+      end
+
       it "works" do
         expect(subject)
           .to receive(:log_request)
           .with(
-            :post,
-            "https://api.afterbanks.com/V3/some/endpoint",
-            { a: :b, c: :d, e: :f }
+            method: :post,
+            url: "https://api.afterbanks.com/V3/some/endpoint",
+            params: { a: :b, c: :d, e: :f },
+            debug_id: 'abcd'
           )
 
         expect(RestClient::Request)
@@ -71,6 +93,7 @@ describe Afterbanks do
             url: "https://api.afterbanks.com/V3/some/endpoint",
             payload: {:a=>:b, :c=>:d, :e=>:f}
           )
+          .and_call_original
 
         api_call
       end
@@ -80,9 +103,48 @@ describe Afterbanks do
   describe "#log_request" do
     let(:method) { :cuca }
     let(:url) { "https://some.where/over/the/rainbow" }
-    let(:log_request) {
-      subject.log_request(method, url, params)
+    let(:params) {
+      {
+        servicekey: 'secret_stuff',
+        a: :z,
+        user: "the_super_secret_stuff",
+        pass: 'mipass',
+        b: :c,
+        code: 'ruby',
+        pass2: 'misecondpass',
+        d: :e
+      }
     }
+    let(:debug_id) { 'abcd' }
+    let(:log_request) {
+      subject.log_request(
+        method: method,
+        url: url,
+        params: params,
+        debug_id: debug_id
+      )
+    }
+
+    it "works" do
+      [
+        "",
+        "=> CUCA https://some.where/over/the/rainbow",
+        "* Debug ID: abcd",
+        "* Params",
+        "servicekey: <masked>",
+        "a: z",
+        "user: <masked>",
+        "pass: <masked>",
+        "b: c",
+        "code: ruby",
+        "pass2: <masked>",
+        "d: e",
+      ].each do |unique_message|
+        expect(subject).to receive(:log_message).with(unique_message).once
+      end
+
+      log_request
+    end
 
     context "without params" do
       let(:params) { {} }
@@ -91,6 +153,7 @@ describe Afterbanks do
         [
           "",
           "=> CUCA https://some.where/over/the/rainbow",
+          "* Debug ID: abcd",
           "* No params"
         ].each do |unique_message|
           expect(subject).to receive(:log_message).with(unique_message).once
@@ -100,23 +163,17 @@ describe Afterbanks do
       end
     end
 
-    context "with some params" do
-      let(:params) {
-        {
-          user: "the_super_secret_stuff",
-          pass: 'mipass',
-          b: :c,
-          code: 'ruby',
-          pass2: 'misecondpass',
-          d: :e
-        }
-      }
+    context "without debug_id" do
+      let(:debug_id) { nil }
 
       it "works" do
         [
           "",
           "=> CUCA https://some.where/over/the/rainbow",
+          "* Debug ID: none",
           "* Params",
+          "servicekey: <masked>",
+          "a: z",
           "user: <masked>",
           "pass: <masked>",
           "b: c",

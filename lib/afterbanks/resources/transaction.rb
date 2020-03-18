@@ -6,7 +6,7 @@ module Afterbanks
       :documenttype, :user, :pass, :pass2, :userdesc, :passdesc, :pass2desc,
       :usertype, :passtype, :pass2type, :image, :color
 
-    def self.list(service:, username:, password:, products: 'GLOBAL',
+    def self.list(service:, username:, password:, products: nil,
                   session_id: nil, otp: nil)
 
       params = {
@@ -14,7 +14,7 @@ module Afterbanks
         service: service,
         user: username,
         pass: password,
-        products: products, # TODO allow asking for one only
+        products: products || 'GLOBAL', # TODO allow asking for one only
         startdate: '01-01-2020' # TODO allow asking for a specific date
       }
 

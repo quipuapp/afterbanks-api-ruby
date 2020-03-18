@@ -3,7 +3,7 @@ require 'json'
 
 module Afterbanks
   BASE_URL = 'https://api.afterbanks.com'
-  SENSIBLE_PARAMS = %w{user pass pass2}
+  SENSIBLE_PARAMS = %w{servicekey user pass pass2}
 
   class << self
     attr_accessor :configuration
@@ -19,8 +19,6 @@ module Afterbanks
     def api_call(method:, path:, params: {})
       url = Afterbanks.const_get(:BASE_URL) + path
 
-      log_request(method, url, params)
-
       request_params = { method: method, url: url }
 
       if method == :post
@@ -32,18 +30,32 @@ module Afterbanks
       begin
         response = RestClient::Request.execute(request_params)
 
+        log_request(
+          method: method,
+          url: url,
+          params: params,
+          debug_id: response.headers[:debug_id]
+        )
+
         JSON.parse(response)
-      rescue StandardError => error
-        # TODO handle properly
+      rescue RestClient::BadRequest => bad_request
         byebug
-        response = JSON.parse(error.response)
-        raise Error.new(response['error'])
+
+        log_request(
+          method: method,
+          url: url,
+          params: params
+        )
+
+        raise bad_request
       end
     end
 
-    def log_request(method, url, params)
+    def log_request(method:, url:, params: {}, debug_id: nil)
       log_message("")
       log_message("=> #{method.upcase} #{url}")
+
+      log_message("* Debug ID: #{debug_id || 'none'}")
 
       if params.any?
         log_message("* Params")

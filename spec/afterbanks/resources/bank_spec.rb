@@ -1,8 +1,6 @@
 require "spec_helper"
 
 describe Afterbanks::Bank do
-  before { configure_afterbanks }
-
   describe "#list" do
     before do
       stub_request(:get, "https://api.afterbanks.com/forms/").
