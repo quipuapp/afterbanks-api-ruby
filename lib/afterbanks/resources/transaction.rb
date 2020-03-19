@@ -7,7 +7,8 @@ module Afterbanks
       :usertype, :passtype, :pass2type, :image, :color
 
     def self.list(service:, username:, password:, products: nil,
-                  session_id: nil, otp: nil)
+                  session_id: nil, otp: nil, counter_id: nil,
+                  force_refresh: false)
 
       params = {
         servicekey: Afterbanks.configuration.servicekey,
@@ -20,6 +21,8 @@ module Afterbanks
 
       params.merge!(session_id: session_id) unless session_id.nil?
       params.merge!(OTP: otp) unless otp.nil?
+      params.merge!(counterId: counter_id) unless counter_id.nil?
+      params.merge!(forze_refresh: 1) if force_refresh # The z is not a typo
 
       response = Afterbanks.api_call(
         method: :post,

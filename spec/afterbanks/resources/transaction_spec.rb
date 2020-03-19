@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Afterbanks::Bank do
+describe Afterbanks::Transaction do
   describe "#list" do
     let(:service) { 'a_service' }
     let(:username) { 'user' }

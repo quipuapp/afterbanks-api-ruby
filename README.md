@@ -10,5 +10,5 @@ Changelog
 About Afterbanks
 ------------
 
-* [Public site](https://www.afterbanks.com/)
-* [Documentation](https://app.swaggerhub.com/apis/Afterbanks/afterbanks-api/)
+* [Public site](https://www.afterbanks.com)
+* [Documentation](https://app.swaggerhub.com/apis/Afterbanks/afterbanks-api-extendida)
