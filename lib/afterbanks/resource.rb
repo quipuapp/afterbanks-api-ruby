@@ -22,14 +22,12 @@ module Afterbanks
     def generate_attr_readers
       fields.each do |field|
         define_singleton_method(field) do
-          load_data! if instance_variable_get("@#{field}").nil?
           instance_variable_get("@#{field}")
         end
       end
 
       (resources + collections).each do |resource|
         define_singleton_method(resource[:name]) do
-          load_data! if instance_variable_get("@#{resource[:name]}").nil?
           instance_variable_get("@#{resource[:name]}")
         end
       end

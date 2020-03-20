@@ -2,9 +2,6 @@ require 'rest-client'
 require 'json'
 
 module Afterbanks
-  BASE_URL = 'https://api.afterbanks.com'
-  SENSIBLE_PARAMS = %w{servicekey user pass pass2}
-
   class << self
     attr_accessor :configuration
 
@@ -17,7 +14,7 @@ module Afterbanks
     end
 
     def api_call(method:, path:, params: {})
-      url = Afterbanks.const_get(:BASE_URL) + path
+      url = 'https://api.afterbanks.com' + path
 
       request_params = { method: method, url: url }
 
@@ -60,7 +57,7 @@ module Afterbanks
       if params.any?
         log_message("* Params")
         params.each do |key, value|
-          safe_value = if SENSIBLE_PARAMS.include?(key.to_s)
+          safe_value = if %w{servicekey user pass pass2}.include?(key.to_s)
                          "<masked>"
                        else
                          value

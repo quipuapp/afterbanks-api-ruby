@@ -30,7 +30,7 @@ module Afterbanks
         params: params
       )
 
-      byebug
+      byebug # TODO remove
 
       # TODO proper error management
       if response.is_a?(Hash) && response['code'] == 50

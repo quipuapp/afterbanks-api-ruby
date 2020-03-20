@@ -5,5 +5,6 @@ require 'afterbanks/error'
 require 'afterbanks/resource'
 require 'afterbanks/collection'
 
+require 'afterbanks/resources/user'
 require 'afterbanks/resources/bank'
 require 'afterbanks/resources/transaction'
