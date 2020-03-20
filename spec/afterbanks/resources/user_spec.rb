@@ -19,9 +19,9 @@ describe Afterbanks::User do
       user = Afterbanks::User.get
 
       expect(user.class).to eq(Afterbanks::User)
-      expect(user.limit).to eq("1234391245")
-      expect(user.counter).to eq("912")
-      expect(user.remaining_calls).to eq("1234390333")
+      expect(user.limit).to eq(1234391245)
+      expect(user.counter).to eq(912)
+      expect(user.remaining_calls).to eq(1234390333)
       expect(user.date_renewal).to eq("01-04-2020")
       expect(user.detail).to be_nil
     end

@@ -1,0 +1,65 @@
+[
+  {
+    "product": "ES2720809591124344566256",
+    "type": "checking",
+    "balance": 104.33,
+    "currency": "EUR",
+    "description": "A checking account",
+    "iban": "ES2720809591124344566256",
+    "is_owner": 1,
+    "holders": [
+      {
+        "role": "Admin",
+        "name": "Mary",
+        "id": 1
+      },
+      {
+        "role": "Admin",
+        "name": "Liz",
+        "id": 2
+      },
+      {
+        "role": "Supervisor",
+        "name": "John",
+        "id": 3
+      }
+    ]
+  },
+  {
+    "product": "ES8401821618664757634169",
+    "type": "checking",
+    "balance": 216.19,
+    "currency": "EUR",
+    "description": "Another checking account",
+    "iban": "ES8401821618664757634169",
+    "is_owner": 1,
+    "holders": [
+      {
+        "role": "Admin",
+        "name": "Mary",
+        "id": 11
+      }
+    ]
+  },
+  {
+    "product": "ES9231902434113168967688",
+    "type": "loan",
+    "balance": -91.99,
+    "currency": "USD",
+    "description": "A loan",
+    "iban": "ES9231902434113168967688",
+    "is_owner": 0,
+    "holders": [
+      {
+        "role": "Admin",
+        "name": "Sandy",
+        "id": 12
+      },
+      {
+        "role": "Supervisor",
+        "name": "Joe",
+        "id": 34
+      }
+    ]
+  }
+]

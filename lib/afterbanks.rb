@@ -7,4 +7,5 @@ require 'afterbanks/collection'
 
 require 'afterbanks/resources/user'
 require 'afterbanks/resources/bank'
+require 'afterbanks/resources/account'
 require 'afterbanks/resources/transaction'

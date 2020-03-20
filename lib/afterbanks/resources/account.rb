@@ -1,12 +1,11 @@
 module Afterbanks
-  class Transaction < Resource
+  class Account < Resource
     RESOURCE_PATH = '/V3/'
 
-    has_fields :country_code, :service, :swift, :fullname, :business,
-      :documenttype, :user, :pass, :pass2, :userdesc, :passdesc, :pass2desc,
-      :usertype, :passtype, :pass2type, :image, :color
+    has_fields :product, :type, :balance, :currency, :description, :iban,
+      :is_owner, :holders
 
-    def self.list(service:, username:, password:, products:,
+    def self.list(service:, username:, password:,
                   session_id: nil, otp: nil, counter_id: nil,
                   force_refresh: false)
 
@@ -15,7 +14,7 @@ module Afterbanks
         service: service,
         user: username,
         pass: password,
-        products: products,
+        products: 'GLOBAL',
         startdate: '01-01-2020' # TODO allow asking for a specific date
       }
 
@@ -30,8 +29,6 @@ module Afterbanks
         params: params
       )
 
-      byebug # TODO remove
-
       # TODO proper error management
       if response.is_a?(Hash) && response['code'] == 50
         raise IncorrectCallParameterError.new(
@@ -40,9 +37,7 @@ module Afterbanks
         )
       end
 
-      # Collection.new(response, self) TODO use some time
-
-      response
+      Collection.new(response, self)
     end
   end
 end
