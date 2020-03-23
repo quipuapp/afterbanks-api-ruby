@@ -17,6 +17,42 @@ module Afterbanks
       self.class.collections
     end
 
+    protected
+
+    def self.treat_errors_if_any(response)
+      return unless response.is_a?(Hash)
+
+      code = response['code']
+      message = response['message']
+      additional_info = response['additional_info']
+
+      case code
+      when 1
+        raise GenericError.new(message: message)
+      when 2
+        raise ServiceUnavailableTemporarilyError.new(message: message)
+      when 3
+        raise ConnectionDataError.new(message: message)
+      when 4
+        raise AccountIdDoesNotExistError.new(message: message)
+      when 5
+        raise CutConnectionError.new(message: message)
+      when 6
+        raise HumanActionNeededError.new(message: message)
+      when 50
+        if additional_info && additional_info['session_id']
+          raise OTPNeededError.new(
+            message: message,
+            additional_info: additional_info
+          )
+        end
+
+        raise AccountIdNeededError.new(message: message)
+      end
+
+      nil
+    end
+
     private
 
     def generate_attr_readers

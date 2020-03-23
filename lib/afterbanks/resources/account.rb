@@ -29,13 +29,7 @@ module Afterbanks
         params: params
       )
 
-      # TODO proper error management
-      if response.is_a?(Hash) && response['code'] == 50
-        raise IncorrectCallParameterError.new(
-          message: response['message'],
-          additional_info: response['additional_info']
-        )
-      end
+      treat_errors_if_any(response)
 
       Collection.new(response, self)
     end

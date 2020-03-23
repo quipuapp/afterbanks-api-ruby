@@ -36,8 +36,6 @@ module Afterbanks
 
         JSON.parse(response)
       rescue RestClient::BadRequest => bad_request
-        byebug
-
         log_request(
           method: method,
           url: url,
