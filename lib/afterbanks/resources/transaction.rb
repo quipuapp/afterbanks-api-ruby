@@ -2,9 +2,8 @@ module Afterbanks
   class Transaction < Resource
     RESOURCE_PATH = '/V3/'
 
-    has_fields :country_code, :service, :swift, :fullname, :business,
-      :documenttype, :user, :pass, :pass2, :userdesc, :passdesc, :pass2desc,
-      :usertype, :passtype, :pass2type, :image, :color
+    has_fields :product, :date, :date2, :amount, :description, :balance,
+      :transactionId, :categoryId
 
     def self.list(service:, username:, password:, products:,
                   session_id: nil, otp: nil, counter_id: nil,
@@ -32,7 +31,30 @@ module Afterbanks
 
       treat_errors_if_any(response)
 
-      response # TODO format properly
+      Collection.new(transactions_information_for(response, products), self)
+    end
+
+    private
+
+    def self.transactions_information_for(response, products)
+      transactions_information = []
+      products_array = products.split(",")
+
+      response.each do |account_information|
+        product = account_information['product']
+
+        if products_array.include?(product)
+          transactions = account_information['transactions']
+
+          transactions.each do |transaction|
+            transaction['product'] = product
+          end
+
+          transactions_information += transactions
+        end
+      end
+
+      transactions_information
     end
   end
 end

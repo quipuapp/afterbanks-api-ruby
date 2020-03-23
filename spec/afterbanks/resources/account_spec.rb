@@ -7,12 +7,12 @@ describe Afterbanks::Account do
     let(:password) { 'a_password' }
     let(:body) {
       {
-        servicekey: 'a_servicekey_which_works',
-        service: service,
-        user: username,
-        pass: password,
-        products: 'GLOBAL',
-        startdate: '01-01-2020'
+        "servicekey" => 'a_servicekey_which_works',
+        "service" => service,
+        "user" => username,
+        "pass" => password,
+        "products" => 'GLOBAL',
+        "startdate" => '01-01-2020'
       }
     }
     let(:api_call) {
@@ -41,9 +41,10 @@ describe Afterbanks::Account do
 
         account1, account2, account3 = accounts
 
+        expect(account1.class).to eq(Afterbanks::Account)
         expect(account1.product).to eq("ES2720809591124344566256")
         expect(account1.type).to eq("checking")
-        expect(account1.balance).to eq(104.33)
+        expect(account1.balance).to eq(1094.12)
         expect(account1.currency).to eq("EUR")
         expect(account1.description).to eq("A checking account")
         expect(account1.iban).to eq("ES2720809591124344566256")
@@ -56,6 +57,7 @@ describe Afterbanks::Account do
           ]
         )
 
+        expect(account2.class).to eq(Afterbanks::Account)
         expect(account2.product).to eq("ES8401821618664757634169")
         expect(account2.type).to eq("checking")
         expect(account2.balance).to eq(216.19)
@@ -69,6 +71,7 @@ describe Afterbanks::Account do
           ]
         )
 
+        expect(account3.class).to eq(Afterbanks::Account)
         expect(account3.product).to eq("ES9231902434113168967688")
         expect(account3.type).to eq("loan")
         expect(account3.balance).to eq(-91.99)

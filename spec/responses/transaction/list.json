@@ -23,6 +23,44 @@
         "name": "John",
         "id": 3
       }
+    ],
+    "transactions": [
+      {
+        "date": "01-02-2020",
+        "date2": "02-02-2020",
+        "amount": 123.11,
+        "description": "Some money in",
+        "balance": 1094.12,
+        "transactionId": "abcd1234",
+        "categoryId": 19
+      },
+      {
+        "date": "20-01-2020",
+        "date2": "20-01-2020",
+        "amount": -29.58,
+        "description": "A small purchase",
+        "balance": 971.01,
+        "transactionId": "defg4321",
+        "categoryId": 6
+      },
+      {
+        "date": "15-01-2020",
+        "date2": "15-01-2020",
+        "amount": -467.12,
+        "description": "A big purchase",
+        "balance": 1000.59,
+        "transactionId": "ghij1928",
+        "categoryId": 12
+      },
+      {
+        "date": "01-01-2019",
+        "date2": "01-01-2019",
+        "amount": 1467.71,
+        "description": "Initial transaction",
+        "balance": 1467.71,
+        "transactionId": "jklm5647",
+        "categoryId": 3
+      }
     ]
   },
   {
