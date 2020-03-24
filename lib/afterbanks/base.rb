@@ -45,9 +45,13 @@ module Afterbanks
     end
 
     def log_request(method:, url:, params: {}, debug_id: nil)
+      now = Time.now
+
       log_message("")
       log_message("=> #{method.upcase} #{url}")
 
+      log_message("* Time: #{now}")
+      log_message("* Timestamp: #{now.to_i}")
       log_message("* Debug ID: #{debug_id || 'none'}")
 
       if params.any?

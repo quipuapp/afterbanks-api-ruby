@@ -101,6 +101,10 @@ describe Afterbanks do
   end
 
   describe "#log_request" do
+    before do
+      Timecop.freeze(Time.new(2020, 3, 24, 18, 47))
+    end
+
     let(:method) { :cuca }
     let(:url) { "https://some.where/over/the/rainbow" }
     let(:params) {
@@ -129,6 +133,8 @@ describe Afterbanks do
       [
         "",
         "=> CUCA https://some.where/over/the/rainbow",
+        "* Time: 2020-03-24 18:47:00 +0100",
+        "* Timestamp: 1585072020",
         "* Debug ID: abcd",
         "* Params",
         "servicekey: <masked>",
@@ -153,6 +159,8 @@ describe Afterbanks do
         [
           "",
           "=> CUCA https://some.where/over/the/rainbow",
+          "* Time: 2020-03-24 18:47:00 +0100",
+          "* Timestamp: 1585072020",
           "* Debug ID: abcd",
           "* No params"
         ].each do |unique_message|
@@ -170,6 +178,8 @@ describe Afterbanks do
         [
           "",
           "=> CUCA https://some.where/over/the/rainbow",
+          "* Time: 2020-03-24 18:47:00 +0100",
+          "* Timestamp: 1585072020",
           "* Debug ID: none",
           "* Params",
           "servicekey: <masked>",
@@ -186,6 +196,10 @@ describe Afterbanks do
 
         log_request
       end
+    end
+
+    after do
+      Timecop.return
     end
   end
 
