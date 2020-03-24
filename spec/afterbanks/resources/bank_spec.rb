@@ -23,7 +23,7 @@ describe Afterbanks::Bank do
       expect(bank1.service).to eq("N26")
       expect(bank1.swift).to eq("NTSBDEB1")
       expect(bank1.fullname).to eq("N26")
-      expect(bank1.business).to eq("0")
+      expect(bank1.business).to be_falsey
       expect(bank1.documenttype).to eq("0")
       expect(bank1.user).to eq("Correo electrónico")
       expect(bank1.pass).to eq("Contraseña")
@@ -42,7 +42,7 @@ describe Afterbanks::Bank do
       expect(bank2.service).to eq("bbva")
       expect(bank2.swift).to eq("BBVAESMM")
       expect(bank2.fullname).to eq("BBVA")
-      expect(bank2.business).to eq("0")
+      expect(bank2.business).to be_falsey
       expect(bank2.documenttype).to eq("0")
       expect(bank2.user).to eq("Usuario")
       expect(bank2.pass).to eq("Clave")
@@ -61,7 +61,7 @@ describe Afterbanks::Bank do
       expect(bank3.service).to eq("caixa_emp")
       expect(bank3.swift).to eq("CAIXESBB")
       expect(bank3.fullname).to eq("Caixabank")
-      expect(bank3.business).to eq("1")
+      expect(bank3.business).to be_truthy
       expect(bank3.documenttype).to eq("0")
       expect(bank3.user).to eq("Identificación")
       expect(bank3.pass).to eq("PIN1")
@@ -80,7 +80,7 @@ describe Afterbanks::Bank do
       expect(bank4.service).to eq("sabadell")
       expect(bank4.swift).to eq("BSABESBB")
       expect(bank4.fullname).to eq("Banco Sabadell")
-      expect(bank4.business).to eq("0")
+      expect(bank4.business).to be_falsey
       expect(bank4.documenttype).to eq("0")
       expect(bank4.user).to eq("Usuario")
       expect(bank4.pass).to eq("Clave de acceso")

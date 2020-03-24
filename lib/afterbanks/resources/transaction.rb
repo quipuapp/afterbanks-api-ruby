@@ -1,9 +1,13 @@
 module Afterbanks
   class Transaction < Resource
-    RESOURCE_PATH = '/V3/'
-
-    has_fields :product, :date, :date2, :amount, :description, :balance,
-      :transactionId, :categoryId
+    has_fields product: :string,
+               date: :date,
+               date2: :date,
+               amount: :decimal,
+               description: :string,
+               balance: :decimal,
+               transactionId: :string,
+               categoryId: :integer
 
     def self.list(service:, username:, password:, products:,
                   session_id: nil, otp: nil, counter_id: nil,
@@ -25,7 +29,7 @@ module Afterbanks
 
       response = Afterbanks.api_call(
         method: :post,
-        path: RESOURCE_PATH,
+        path: '/V3/',
         params: params
       )
 

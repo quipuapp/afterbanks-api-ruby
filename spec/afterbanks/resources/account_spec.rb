@@ -48,7 +48,7 @@ describe Afterbanks::Account do
         expect(account1.currency).to eq("EUR")
         expect(account1.description).to eq("A checking account")
         expect(account1.iban).to eq("ES2720809591124344566256")
-        expect(account1.is_owner).to eq(1)
+        expect(account1.is_owner).to be_truthy
         expect(account1.holders).to eq(
           [
             { "role" => 'Admin', "name" => 'Mary', "id" => 1 },
@@ -64,7 +64,7 @@ describe Afterbanks::Account do
         expect(account2.currency).to eq("EUR")
         expect(account2.description).to eq("Another checking account")
         expect(account2.iban).to eq("ES8401821618664757634169")
-        expect(account2.is_owner).to eq(1)
+        expect(account2.is_owner).to be_truthy
         expect(account2.holders).to eq(
           [
             { "role" => 'Admin', "name" => 'Mary', "id" => 11 }
@@ -78,7 +78,7 @@ describe Afterbanks::Account do
         expect(account3.currency).to eq("USD")
         expect(account3.description).to eq("A loan")
         expect(account3.iban).to eq("ES9231902434113168967688")
-        expect(account3.is_owner).to eq(0)
+        expect(account3.is_owner).to be_falsey
         expect(account3.holders).to eq(
           [
             { "role" => 'Admin', "name" => 'Sandy', "id" => 12 },

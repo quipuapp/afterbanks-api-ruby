@@ -22,7 +22,7 @@ describe Afterbanks::User do
       expect(user.limit).to eq(1234391245)
       expect(user.counter).to eq(912)
       expect(user.remaining_calls).to eq(1234390333)
-      expect(user.date_renewal).to eq("01-04-2020")
+      expect(user.date_renewal).to eq(Date.new(2020, 4, 1))
       expect(user.detail).to be_nil
     end
   end

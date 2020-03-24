@@ -1,15 +1,27 @@
 module Afterbanks
   class Bank < Resource
-    RESOURCE_PATH = '/forms/'
-
-    has_fields :country_code, :service, :swift, :fullname, :business,
-      :documenttype, :user, :pass, :pass2, :userdesc, :passdesc, :pass2desc,
-      :usertype, :passtype, :pass2type, :image, :color
+    has_fields country_code: :string,
+               service: :string,
+               swift: :string,
+               fullname: :string,
+               business: :boolean,
+               documenttype: :string,
+               user: :string,
+               pass: :string,
+               pass2: :string,
+               userdesc: :string,
+               passdesc: :string,
+               pass2desc: :string,
+               usertype: :string,
+               passtype: :string,
+               pass2type: :string,
+               image: :string,
+               color: :string
 
     def self.list
       response = Afterbanks.api_call(
         method: :get,
-        path: RESOURCE_PATH
+        path: '/forms/'
       )
       Collection.new(response, self)
     end

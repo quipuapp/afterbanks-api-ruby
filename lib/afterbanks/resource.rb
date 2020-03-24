@@ -56,78 +56,41 @@ module Afterbanks
     private
 
     def generate_attr_readers
-      fields.each do |field|
+      self.class.fields_information.each do |field, _|
         define_singleton_method(field) do
           instance_variable_get("@#{field}")
-        end
-      end
-
-      (resources + collections).each do |resource|
-        define_singleton_method(resource[:name]) do
-          instance_variable_get("@#{resource[:name]}")
         end
       end
     end
 
     def set_data(data)
-      fields.each do |field|
+      self.class.fields_information.each do |field, type|
         next unless data.key?(field.to_s)
-        instance_variable_set("@#{field}", data[field.to_s])
-      end
 
-      resources.each do |resource|
-        next unless data.key?(resource[:name].to_s)
-        klass = Object.const_get("Afterbanks::#{resource[:klass]}")
-        instance_variable_set("@#{resource[:name]}", klass.new(data[resource[:name].to_s]))
-      end
-
-      collections.each do |collection|
-        next unless data[collection[:name].to_s]
-        klass = Object.const_get("Afterbanks::#{collection[:klass]}")
-        arr = data[collection[:name].to_s].map { |item | klass.new(item) }
-        instance_variable_set("@#{collection[:name]}", arr)
-        instance_variable_set("@#{collection[:name]}_ids", arr.map(&:id))
+        raw_value = data[field.to_s]
+        value = value_for(raw_value, type)
+        instance_variable_set("@#{field}", value)
       end
     end
 
-    def load_data!
-      return if @loaded
-      response = Afterbanks.api_call(method: :get, path: @resource_uri)
-      set_data(response)
-      @loaded = true
+    def value_for(raw_value, type)
+      case type
+      when :boolean
+        ["1", 1].include?(raw_value)
+      when :date
+        Date.parse(raw_value) if raw_value
+      else
+        raw_value
+      end
     end
 
     class << self
-      def fields
-        @fields || [:resource_type, :resource_uri]
+      def fields_information
+        @fields_information
       end
 
-      def resources
-        @resources || []
-      end
-
-      def collections
-        @collections || []
-      end
-
-      def auth_delegate(name, options)
-        define_method(name) do |*args|
-          klass = Object.const_get("Afterbanks::#{options[:class]}")
-          klass.send(options[:method], *args)
-        end
-      end
-
-      def has_fields(*new_fields)
-        @fields = (fields + new_fields).uniq
-      end
-
-      def has_resource(name, klass)
-        @resources = resources << { name: name, klass: klass }
-      end
-
-      def has_collection(name, klass)
-        @collections = collections << { name: name, klass: klass }
-        attr_reader :"#{name}_ids"
+      def has_fields(fields_information)
+        @fields_information = fields_information
       end
     end
   end

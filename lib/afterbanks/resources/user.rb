@@ -1,6 +1,10 @@
 module Afterbanks
   class User < Resource
-    has_fields :limit, :counter, :remaining_calls, :date_renewal, :detail
+    has_fields limit: :integer,
+               counter: :integer,
+               remaining_calls: :integer,
+               date_renewal: :date,
+               detail: :string
 
     def self.get
       response = Afterbanks.api_call(
