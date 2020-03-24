@@ -18,8 +18,7 @@ module Afterbanks
         service: service,
         user: username,
         pass: password,
-        products: 'GLOBAL',
-        startdate: '01-01-2020' # TODO allow asking for a specific date
+        products: 'GLOBAL'
       }
 
       params.merge!(session_id: session_id) unless session_id.nil?

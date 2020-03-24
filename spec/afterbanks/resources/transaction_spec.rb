@@ -6,6 +6,7 @@ describe Afterbanks::Transaction do
     let(:username) { 'a_user' }
     let(:password) { 'a_password' }
     let(:products) { 'ES2720809591124344566256' }
+    let(:startdate) { Date.new(2020, 3, 24) }
     let(:body) {
       {
         "servicekey" => 'a_servicekey_which_works',
@@ -13,7 +14,7 @@ describe Afterbanks::Transaction do
         "user" => username,
         "pass" => password,
         "products" => products,
-        "startdate" => '01-01-2020'
+        "startdate" => startdate.strftime("%d-%m-%Y")
       }
     }
     let(:api_call) {
@@ -21,7 +22,8 @@ describe Afterbanks::Transaction do
         service: service,
         username: username,
         password: password,
-        products: products
+        products: products,
+        startdate: startdate
       )
     }
 

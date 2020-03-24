@@ -11,8 +11,7 @@ describe Afterbanks::Account do
         "service" => service,
         "user" => username,
         "pass" => password,
-        "products" => 'GLOBAL',
-        "startdate" => '01-01-2020'
+        "products" => 'GLOBAL'
       }
     }
     let(:api_call) {

@@ -9,7 +9,7 @@ module Afterbanks
                transactionId: :string,
                categoryId: :integer
 
-    def self.list(service:, username:, password:, products:,
+    def self.list(service:, username:, password:, products:, startdate:,
                   session_id: nil, otp: nil, counter_id: nil,
                   force_refresh: false)
 
@@ -19,7 +19,7 @@ module Afterbanks
         user: username,
         pass: password,
         products: products,
-        startdate: '01-01-2020' # TODO allow asking for a specific date
+        startdate: startdate.strftime("%d-%m-%Y")
       }
 
       params.merge!(session_id: session_id) unless session_id.nil?
