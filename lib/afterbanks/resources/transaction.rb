@@ -9,9 +9,9 @@ module Afterbanks
                transactionId: :string,
                categoryId: :integer
 
-    def self.list(service:, username:, password:, products:, startdate:,
-                  session_id: nil, otp: nil, counter_id: nil,
-                  force_refresh: false)
+    def self.list(service:, username:, password:, password2: nil,
+                  products:, startdate:,
+                  session_id: nil, otp: nil, counter_id: nil)
 
       params = {
         servicekey: Afterbanks.configuration.servicekey,
@@ -22,18 +22,16 @@ module Afterbanks
         startdate: startdate.strftime("%d-%m-%Y")
       }
 
+      params.merge!(pass2: password2) unless password2.nil?
       params.merge!(session_id: session_id) unless session_id.nil?
       params.merge!(OTP: otp) unless otp.nil?
       params.merge!(counterId: counter_id) unless counter_id.nil?
-      params.merge!(forze_refresh: 1) if force_refresh # The z is not a typo
 
       response = Afterbanks.api_call(
         method: :post,
         path: '/V3/',
         params: params
       )
-
-      treat_errors_if_any(response)
 
       Collection.new(transactions_information_for(response, products), self)
     end

@@ -9,9 +9,8 @@ module Afterbanks
                is_owner: :boolean,
                holders: :hash
 
-    def self.list(service:, username:, password:,
-                  session_id: nil, otp: nil, counter_id: nil,
-                  force_refresh: false)
+    def self.list(service:, username:, password:, password2: nil,
+                  session_id: nil, otp: nil, counter_id: nil)
 
       params = {
         servicekey: Afterbanks.configuration.servicekey,
@@ -21,18 +20,16 @@ module Afterbanks
         products: 'GLOBAL'
       }
 
+      params.merge!(pass2: password2) unless password2.nil?
       params.merge!(session_id: session_id) unless session_id.nil?
       params.merge!(OTP: otp) unless otp.nil?
       params.merge!(counterId: counter_id) unless counter_id.nil?
-      params.merge!(forze_refresh: 1) if force_refresh # The z is not a typo
 
       response = Afterbanks.api_call(
         method: :post,
         path: '/V3/',
         params: params
       )
-
-      treat_errors_if_any(response)
 
       Collection.new(response, self)
     end

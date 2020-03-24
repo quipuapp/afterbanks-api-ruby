@@ -93,7 +93,7 @@ describe Afterbanks::Account do
           stub_request(:post, "https://api.afterbanks.com/V3/").
             with(body: body).
             to_return(
-              status: 200,
+              status: 400,
               body: response_json(resource: 'common', action: 'error_1')
             )
         end
@@ -108,7 +108,7 @@ describe Afterbanks::Account do
         end
       end
 
-      context "which is generic (code 2)" do
+      context "which is service unavailable temporarily (code 2)" do
         before do
           stub_request(:post, "https://api.afterbanks.com/V3/").
             with(body: body).
@@ -118,7 +118,7 @@ describe Afterbanks::Account do
             )
         end
 
-        it "raises a GenericError" do
+        it "raises a ServiceUnavailableTemporarilyError" do
           expect { api_call }.to raise_error(
             an_instance_of(Afterbanks::ServiceUnavailableTemporarilyError)
               .and having_attributes(
@@ -128,17 +128,17 @@ describe Afterbanks::Account do
         end
       end
 
-      context "which is generic (code 3)" do
+      context "which is connection data (code 3)" do
         before do
           stub_request(:post, "https://api.afterbanks.com/V3/").
             with(body: body).
             to_return(
-              status: 200,
+              status: 417,
               body: response_json(resource: 'common', action: 'error_3')
             )
         end
 
-        it "raises a GenericError" do
+        it "raises a ConnectionDataError" do
           expect { api_call }.to raise_error(
             an_instance_of(Afterbanks::ConnectionDataError)
               .and having_attributes(
@@ -148,7 +148,7 @@ describe Afterbanks::Account do
         end
       end
 
-      context "which is generic (code 4)" do
+      context "which is account ID does not exist (code 4)" do
         before do
           stub_request(:post, "https://api.afterbanks.com/V3/").
             with(body: body).
@@ -158,7 +158,7 @@ describe Afterbanks::Account do
             )
         end
 
-        it "raises a GenericError" do
+        it "raises a AccountIdDoesNotExistError" do
           expect { api_call }.to raise_error(
             an_instance_of(Afterbanks::AccountIdDoesNotExistError)
               .and having_attributes(
@@ -168,7 +168,7 @@ describe Afterbanks::Account do
         end
       end
 
-      context "which is generic (code 5)" do
+      context "which is cut connection (code 5)" do
         before do
           stub_request(:post, "https://api.afterbanks.com/V3/").
             with(body: body).
@@ -178,7 +178,7 @@ describe Afterbanks::Account do
             )
         end
 
-        it "raises a GenericError" do
+        it "raises a CutConnectionError" do
           expect { api_call }.to raise_error(
             an_instance_of(Afterbanks::CutConnectionError)
               .and having_attributes(
@@ -188,7 +188,7 @@ describe Afterbanks::Account do
         end
       end
 
-      context "which is generic (code 6)" do
+      context "which is human action needed (code 6)" do
         before do
           stub_request(:post, "https://api.afterbanks.com/V3/").
             with(body: body).
@@ -198,7 +198,7 @@ describe Afterbanks::Account do
             )
         end
 
-        it "raises a GenericError" do
+        it "raises a HumanActionNeededError" do
           expect { api_call }.to raise_error(
             an_instance_of(Afterbanks::HumanActionNeededError)
               .and having_attributes(

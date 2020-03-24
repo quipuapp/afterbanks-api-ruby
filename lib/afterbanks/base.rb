@@ -24,26 +24,24 @@ module Afterbanks
         request_params.merge!(headers: { params: params })
       end
 
-      begin
-        response = RestClient::Request.execute(request_params)
-
-        log_request(
-          method: method,
-          url: url,
-          params: params,
-          debug_id: response.headers[:debug_id]
-        )
-
-        JSON.parse(response)
-      rescue RestClient::BadRequest => bad_request
-        log_request(
-          method: method,
-          url: url,
-          params: params
-        )
-
-        raise bad_request
+      response = begin
+        RestClient::Request.execute(request_params)
+      rescue RestClient::BadRequest, RestClient::ExpectationFailed => bad_request
+        bad_request.response
       end
+
+      log_request(
+        method: method,
+        url: url,
+        params: params,
+        debug_id: response.headers[:debug_id]
+      )
+
+      response_body = JSON.parse(response.body)
+
+      treat_errors_if_any(response_body)
+
+      response_body
     end
 
     def log_request(method:, url:, params: {}, debug_id: nil)
@@ -75,6 +73,42 @@ module Afterbanks
       return if logger.nil?
 
       logger.info(message)
+    end
+
+    private
+
+    def treat_errors_if_any(response_body)
+      return unless response_body.is_a?(Hash)
+
+      code = response_body['code']
+      message = response_body['message']
+      additional_info = response_body['additional_info']
+
+      case code
+      when 1
+        raise GenericError.new(message: message)
+      when 2
+        raise ServiceUnavailableTemporarilyError.new(message: message)
+      when 3
+        raise ConnectionDataError.new(message: message)
+      when 4
+        raise AccountIdDoesNotExistError.new(message: message)
+      when 5
+        raise CutConnectionError.new(message: message)
+      when 6
+        raise HumanActionNeededError.new(message: message)
+      when 50
+        if additional_info && additional_info['session_id']
+          raise OTPNeededError.new(
+            message: message,
+            additional_info: additional_info
+          )
+        end
+
+        raise AccountIdNeededError.new(message: message)
+      end
+
+      nil
     end
   end
 end
