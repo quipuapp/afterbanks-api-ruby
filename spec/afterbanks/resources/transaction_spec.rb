@@ -28,62 +28,124 @@ describe Afterbanks::Transaction do
     }
 
     context "when returning data" do
-      before do
-        stub_request(:post, "https://api.afterbanks.com/V3/").
-          with(body: body).
-          to_return(
-            status: 200,
-            body: response_json(resource: 'transaction', action: 'list')
-          )
+      shared_examples "proper request and data parsing" do
+        before do
+          stub_request(:post, "https://api.afterbanks.com/V3/").
+            with(body: body).
+            to_return(
+              status: 200,
+              body: response_json(resource: 'transaction', action: 'list')
+            )
+        end
+
+        it "does the proper request and returns the proper Afterbanks::Transaction instances" do
+          transactions = api_call
+
+          expect(transactions.class).to eq(Afterbanks::Collection)
+          expect(transactions.size).to eq(4)
+
+          transaction1, transaction2, transaction3, transaction4 = transactions
+
+          expect(transaction1.class).to eq(Afterbanks::Transaction)
+          expect(transaction1.product).to eq('ES2720809591124344566256')
+          expect(transaction1.date).to eq(Date.new(2020, 2, 1))
+          expect(transaction1.date2).to eq(Date.new(2020, 2, 2))
+          expect(transaction1.amount).to eq(123.11)
+          expect(transaction1.description).to eq("Some money in")
+          expect(transaction1.balance).to eq(1094.12)
+          expect(transaction1.transactionId).to eq("abcd1234")
+          expect(transaction1.categoryId).to eq(19)
+
+          expect(transaction2.class).to eq(Afterbanks::Transaction)
+          expect(transaction2.product).to eq('ES2720809591124344566256')
+          expect(transaction2.date).to eq(Date.new(2020, 1, 20))
+          expect(transaction2.date2).to eq(Date.new(2020, 1, 20))
+          expect(transaction2.amount).to eq(-29.58)
+          expect(transaction2.description).to eq("A small purchase")
+          expect(transaction2.balance).to eq(971.01)
+          expect(transaction2.transactionId).to eq("defg4321")
+          expect(transaction2.categoryId).to eq(6)
+
+          expect(transaction3.class).to eq(Afterbanks::Transaction)
+          expect(transaction3.product).to eq('ES2720809591124344566256')
+          expect(transaction3.date).to eq(Date.new(2020, 1, 15))
+          expect(transaction3.date2).to eq(Date.new(2020, 1, 15))
+          expect(transaction3.amount).to eq(-467.12)
+          expect(transaction3.description).to eq("A big purchase")
+          expect(transaction3.balance).to eq(1000.59)
+          expect(transaction3.transactionId).to eq("ghij1928")
+          expect(transaction3.categoryId).to eq(12)
+
+          expect(transaction4.class).to eq(Afterbanks::Transaction)
+          expect(transaction4.product).to eq('ES2720809591124344566256')
+          expect(transaction4.date).to eq(Date.new(2019, 1, 1))
+          expect(transaction4.date2).to eq(Date.new(2019, 1, 1))
+          expect(transaction4.amount).to eq(1467.71)
+          expect(transaction4.description).to eq("Initial transaction")
+          expect(transaction4.balance).to eq(1467.71)
+          expect(transaction4.transactionId).to eq("jklm5647")
+          expect(transaction4.categoryId).to eq(3)
+        end
       end
 
-      it "works" do
-        transactions = api_call
+      context "for a normal case" do
+        include_examples "proper request and data parsing"
+      end
 
-        expect(transactions.class).to eq(Afterbanks::Collection)
-        expect(transactions.size).to eq(4)
+      context "for a case with a second password" do
+        let(:body) {
+          {
+            "servicekey" => 'a_servicekey_which_works',
+            "service" => service,
+            "user" => username,
+            "pass" => password,
+            "pass2" => 'cucamonga',
+            "products" => products,
+            "startdate" => startdate.strftime("%d-%m-%Y")
+          }
+        }
+        let(:api_call) {
+          Afterbanks::Transaction.list(
+            service: service,
+            username: username,
+            password: password,
+            password2: "cucamonga",
+            products: products,
+            startdate: startdate
+          )
+        }
 
-        transaction1, transaction2, transaction3, transaction4 = transactions
+        include_examples "proper request and data parsing"
+      end
 
-        expect(transaction1.class).to eq(Afterbanks::Transaction)
-        expect(transaction1.product).to eq('ES2720809591124344566256')
-        expect(transaction1.date).to eq(Date.new(2020, 2, 1))
-        expect(transaction1.date2).to eq(Date.new(2020, 2, 2))
-        expect(transaction1.amount).to eq(123.11)
-        expect(transaction1.description).to eq("Some money in")
-        expect(transaction1.balance).to eq(1094.12)
-        expect(transaction1.transactionId).to eq("abcd1234")
-        expect(transaction1.categoryId).to eq(19)
+      context "for an OTP case" do
+        let(:body) {
+          {
+            "servicekey" => 'a_servicekey_which_works',
+            "service" => service,
+            "user" => username,
+            "pass" => password,
+            "products" => products,
+            "startdate" => startdate.strftime("%d-%m-%Y"),
+            "session_id" => 'abcd1234',
+            "OTP" => '1745',
+            "counterId" => "4"
+          }
+        }
+        let(:api_call) {
+          Afterbanks::Transaction.list(
+            service: service,
+            username: username,
+            password: password,
+            products: products,
+            startdate: startdate,
+            session_id: 'abcd1234',
+            otp: '1745',
+            counter_id: 4
+          )
+        }
 
-        expect(transaction2.class).to eq(Afterbanks::Transaction)
-        expect(transaction2.product).to eq('ES2720809591124344566256')
-        expect(transaction2.date).to eq(Date.new(2020, 1, 20))
-        expect(transaction2.date2).to eq(Date.new(2020, 1, 20))
-        expect(transaction2.amount).to eq(-29.58)
-        expect(transaction2.description).to eq("A small purchase")
-        expect(transaction2.balance).to eq(971.01)
-        expect(transaction2.transactionId).to eq("defg4321")
-        expect(transaction2.categoryId).to eq(6)
-
-        expect(transaction3.class).to eq(Afterbanks::Transaction)
-        expect(transaction3.product).to eq('ES2720809591124344566256')
-        expect(transaction3.date).to eq(Date.new(2020, 1, 15))
-        expect(transaction3.date2).to eq(Date.new(2020, 1, 15))
-        expect(transaction3.amount).to eq(-467.12)
-        expect(transaction3.description).to eq("A big purchase")
-        expect(transaction3.balance).to eq(1000.59)
-        expect(transaction3.transactionId).to eq("ghij1928")
-        expect(transaction3.categoryId).to eq(12)
-
-        expect(transaction4.class).to eq(Afterbanks::Transaction)
-        expect(transaction4.product).to eq('ES2720809591124344566256')
-        expect(transaction4.date).to eq(Date.new(2019, 1, 1))
-        expect(transaction4.date2).to eq(Date.new(2019, 1, 1))
-        expect(transaction4.amount).to eq(1467.71)
-        expect(transaction4.description).to eq("Initial transaction")
-        expect(transaction4.balance).to eq(1467.71)
-        expect(transaction4.transactionId).to eq("jklm5647")
-        expect(transaction4.categoryId).to eq(3)
+        include_examples "proper request and data parsing"
       end
     end
 
