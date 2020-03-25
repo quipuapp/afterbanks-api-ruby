@@ -18,11 +18,18 @@ module Afterbanks
                image: :string,
                color: :string
 
-    def self.list
+    def self.list(ordered: false)
       response = Afterbanks.api_call(
         method: :get,
         path: '/forms/'
       )
+
+      if ordered
+        response.sort! do |bank1, bank2|
+          bank1['fullname'].downcase <=> bank2['fullname'].downcase
+        end
+      end
+
       Collection.new(response, self)
     end
   end
