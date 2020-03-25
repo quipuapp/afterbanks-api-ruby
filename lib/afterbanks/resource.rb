@@ -5,16 +5,8 @@ module Afterbanks
       set_data(data)
     end
 
-    def fields
-      self.class.fields
-    end
-
-    def resources
-      self.class.resources
-    end
-
-    def collections
-      self.class.collections
+    def fields_information
+      self.class.fields_information
     end
 
     protected
@@ -22,7 +14,7 @@ module Afterbanks
     private
 
     def generate_attr_readers
-      self.class.fields_information.each do |field, _|
+      fields_information.each do |field, _|
         define_singleton_method(field) do
           instance_variable_get("@#{field}")
         end
@@ -30,7 +22,7 @@ module Afterbanks
     end
 
     def set_data(data)
-      self.class.fields_information.each do |field, type|
+      fields_information.each do |field, type|
         next unless data.key?(field.to_s)
 
         raw_value = data[field.to_s]
