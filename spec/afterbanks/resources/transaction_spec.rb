@@ -118,6 +118,34 @@ describe Afterbanks::Transaction do
         include_examples "proper request and data parsing"
       end
 
+      context "for a case with a document type" do
+        let(:body) {
+          {
+            "servicekey" => 'a_servicekey_which_works',
+            "service" => service,
+            "user" => username,
+            "pass" => password,
+            "pass2" => 'cucamonga',
+            "documentType" => "1",
+            "products" => products,
+            "startdate" => startdate.strftime("%d-%m-%Y")
+          }
+        }
+        let(:api_call) {
+          Afterbanks::Transaction.list(
+            service: service,
+            username: username,
+            password: password,
+            password2: "cucamonga",
+            document_type: 1,
+            products: products,
+            startdate: startdate
+          )
+        }
+
+        include_examples "proper request and data parsing"
+      end
+
       context "for an OTP case" do
         let(:body) {
           {
