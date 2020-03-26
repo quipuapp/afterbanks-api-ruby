@@ -115,6 +115,31 @@ describe Afterbanks::Account do
         include_examples "proper request and data parsing"
       end
 
+      context "for a case with a document type" do
+        let(:body) {
+          {
+            "servicekey" => 'a_servicekey_which_works',
+            "service" => service,
+            "user" => username,
+            "pass" => password,
+            "pass2" => "cucamonga",
+            "documentType" => "1",
+            "products" => 'GLOBAL'
+          }
+        }
+        let(:api_call) {
+          Afterbanks::Account.list(
+            service: service,
+            username: username,
+            password: password,
+            password2: 'cucamonga',
+            document_type: 1
+          )
+        }
+
+        include_examples "proper request and data parsing"
+      end
+
       context "for an OTP case" do
         let(:body) {
           {
