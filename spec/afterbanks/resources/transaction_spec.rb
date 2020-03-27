@@ -47,6 +47,7 @@ describe Afterbanks::Transaction do
           transaction1, transaction2, transaction3, transaction4 = transactions
 
           expect(transaction1.class).to eq(Afterbanks::Transaction)
+          expect(transaction1.service).to eq('a_service')
           expect(transaction1.product).to eq('ES2720809591124344566256')
           expect(transaction1.date).to eq(Date.new(2020, 2, 1))
           expect(transaction1.date2).to eq(Date.new(2020, 2, 2))
@@ -57,6 +58,7 @@ describe Afterbanks::Transaction do
           expect(transaction1.categoryId).to eq(19)
 
           expect(transaction2.class).to eq(Afterbanks::Transaction)
+          expect(transaction2.service).to eq('a_service')
           expect(transaction2.product).to eq('ES2720809591124344566256')
           expect(transaction2.date).to eq(Date.new(2020, 1, 20))
           expect(transaction2.date2).to eq(Date.new(2020, 1, 20))
@@ -67,6 +69,7 @@ describe Afterbanks::Transaction do
           expect(transaction2.categoryId).to eq(6)
 
           expect(transaction3.class).to eq(Afterbanks::Transaction)
+          expect(transaction3.service).to eq('a_service')
           expect(transaction3.product).to eq('ES2720809591124344566256')
           expect(transaction3.date).to eq(Date.new(2020, 1, 15))
           expect(transaction3.date2).to eq(Date.new(2020, 1, 15))
@@ -77,6 +80,7 @@ describe Afterbanks::Transaction do
           expect(transaction3.categoryId).to eq(12)
 
           expect(transaction4.class).to eq(Afterbanks::Transaction)
+          expect(transaction4.service).to eq('a_service')
           expect(transaction4.product).to eq('ES2720809591124344566256')
           expect(transaction4.date).to eq(Date.new(2019, 1, 1))
           expect(transaction4.date2).to eq(Date.new(2019, 1, 1))

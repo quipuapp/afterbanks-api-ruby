@@ -1,6 +1,7 @@
 module Afterbanks
   class Transaction < Resource
-    has_fields product: :string,
+    has_fields service: :string,
+               product: :string,
                date: :date,
                date2: :date,
                amount: :decimal,
@@ -34,12 +35,19 @@ module Afterbanks
         params: params
       )
 
-      Collection.new(transactions_information_for(response, products), self)
+      Collection.new(
+        transactions_information_for(
+          service: service,
+          response: response,
+          products: products
+        ),
+        self
+      )
     end
 
     private
 
-    def self.transactions_information_for(response, products)
+    def self.transactions_information_for(response:, service:, products:)
       transactions_information = []
       products_array = products.split(",")
 
@@ -51,6 +59,7 @@ module Afterbanks
           next if transactions.nil?
 
           transactions.each do |transaction|
+            transaction['service'] = service
             transaction['product'] = product
           end
 
