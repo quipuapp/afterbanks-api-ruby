@@ -1,6 +1,7 @@
 module Afterbanks
   class Account < Resource
-    has_fields product: :string,
+    has_fields service: :string,
+               product: :string,
                type: :string,
                balance: :decimal,
                currency: :string,
@@ -32,7 +33,26 @@ module Afterbanks
         params: params
       )
 
-      Collection.new(response, self)
+      Collection.new(
+        accounts_information_for(
+          response: response,
+          service: service
+        ),
+        self
+      )
+    end
+
+    private
+
+    def self.accounts_information_for(response:, service:)
+      accounts_information = []
+
+      response.each do |account_information|
+        account_information['service'] = service
+        accounts_information << account_information
+      end
+
+      accounts_information
     end
   end
 end

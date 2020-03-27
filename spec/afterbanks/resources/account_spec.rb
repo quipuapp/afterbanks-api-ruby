@@ -42,6 +42,7 @@ describe Afterbanks::Account do
           account1, account2, account3 = accounts
 
           expect(account1.class).to eq(Afterbanks::Account)
+          expect(account1.service).to eq("a_service")
           expect(account1.product).to eq("ES2720809591124344566256")
           expect(account1.type).to eq("checking")
           expect(account1.balance).to eq(1094.12)
@@ -58,6 +59,7 @@ describe Afterbanks::Account do
           )
 
           expect(account2.class).to eq(Afterbanks::Account)
+          expect(account2.service).to eq("a_service")
           expect(account2.product).to eq("ES8401821618664757634169")
           expect(account2.type).to eq("checking")
           expect(account2.balance).to eq(216.19)
@@ -72,6 +74,7 @@ describe Afterbanks::Account do
           )
 
           expect(account3.class).to eq(Afterbanks::Account)
+          expect(account3.service).to eq("a_service")
           expect(account3.product).to eq("ES9231902434113168967688")
           expect(account3.type).to eq("loan")
           expect(account3.balance).to eq(-91.99)
