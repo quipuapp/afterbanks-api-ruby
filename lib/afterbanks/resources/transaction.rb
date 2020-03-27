@@ -48,6 +48,7 @@ module Afterbanks
 
         if products_array.include?(product)
           transactions = account_information['transactions']
+          next if transactions.nil?
 
           transactions.each do |transaction|
             transaction['product'] = product
