@@ -30,7 +30,28 @@ module Afterbanks
         end
       end
 
-      Collection.new(response, self)
+      Collection.new(
+        banks_information_for(
+          response: response
+        ),
+        self
+      )
+    end
+
+    private
+
+    def self.banks_information_for(response:)
+      banks_information = []
+
+      response.each do |bank_information|
+        if bank_information['business'] == "1"
+          bank_information['fullname'] += " Empresas"
+        end
+
+        banks_information << bank_information
+      end
+
+      banks_information
     end
   end
 end

@@ -60,7 +60,7 @@ describe Afterbanks::Bank do
       expect(bank3.country_code).to eq("ES")
       expect(bank3.service).to eq("caixa_emp")
       expect(bank3.swift).to eq("CAIXESBB")
-      expect(bank3.fullname).to eq("Caixabank")
+      expect(bank3.fullname).to eq("Caixabank Empresas")
       expect(bank3.business).to be_truthy
       expect(bank3.documenttype).to eq("0")
       expect(bank3.user).to eq("Identificación")
@@ -146,7 +146,7 @@ describe Afterbanks::Bank do
         expect(bank3.country_code).to eq("ES")
         expect(bank3.service).to eq("caixa_emp")
         expect(bank3.swift).to eq("CAIXESBB")
-        expect(bank3.fullname).to eq("Caixabank")
+        expect(bank3.fullname).to eq("Caixabank Empresas")
         expect(bank3.business).to be_truthy
         expect(bank3.documenttype).to eq("0")
         expect(bank3.user).to eq("Identificación")
