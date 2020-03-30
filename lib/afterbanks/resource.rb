@@ -9,8 +9,6 @@ module Afterbanks
       self.class.fields_information
     end
 
-    protected
-
     private
 
     def generate_attr_readers
@@ -40,6 +38,26 @@ module Afterbanks
       else
         raw_value
       end
+    end
+
+    def marshal_dump
+      dump = {}
+
+      fields_information.each do |field, _|
+        dump[field] = send(field)
+      end
+
+      dump
+    end
+
+    def marshal_load(serialized_bank)
+      keys = serialized_bank.keys
+
+      keys.each do |key|
+        serialized_bank[key.to_s] = serialized_bank.delete(key)
+      end
+
+      initialize(serialized_bank)
     end
 
     class << self
