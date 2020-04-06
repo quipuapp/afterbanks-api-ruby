@@ -339,4 +339,63 @@ describe Afterbanks::Account do
       end
     end
   end
+
+  describe "serialization" do
+    let(:service) { 'bbva' }
+    let(:product) { 'ES2720809591124344566256' }
+    let(:type) { 'checking' }
+    let(:balance) { 1094.12 }
+    let(:currency) { 'EUR' }
+    let(:description) { 'A checking account' }
+    let(:iban) { 'ES2720809591124344566256' }
+    let(:is_owner) { true }
+    let(:holders) {
+      [
+        {
+          "role": "Admin",
+          "name": "Mary",
+          "id": 1
+        },
+        {
+          "role": "Admin",
+          "name": "Liz",
+          "id": 2
+        },
+        {
+          "role": "Supervisor",
+          "name": "John",
+          "id": 3
+        }
+      ]
+    }
+    let(:original_account) do
+      Afterbanks::Account.new(
+        service: service,
+        product: product,
+        type: type,
+        balance: balance,
+        currency: currency,
+        description: description,
+        iban: iban,
+        is_owner: is_owner,
+        holders: holders
+      )
+    end
+
+    it "works" do
+      serialized_account = Marshal.dump(original_account)
+      recovered_account = Marshal.load(serialized_account)
+
+      expect(recovered_account.class).to eq(Afterbanks::Account)
+      expect(recovered_account.service).to eq(service)
+      expect(recovered_account.product).to eq(product)
+      expect(recovered_account.type).to eq(type)
+      expect(recovered_account.balance).to eq(balance)
+      expect(recovered_account.currency).to eq(currency)
+      expect(recovered_account.description).to eq(description)
+      expect(recovered_account.iban).to eq(iban)
+      expect(recovered_account.is_owner).to eq(is_owner)
+      expect(recovered_account.holders).to eq(holders)
+    end
+  end
 end

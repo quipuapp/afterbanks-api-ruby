@@ -21,9 +21,9 @@ module Afterbanks
 
     def set_data(data)
       fields_information.each do |field, type|
-        next unless data.key?(field.to_s)
+        next unless data.key?(field.to_s) || data[field.to_sym]
 
-        raw_value = data[field.to_s]
+        raw_value = data[field.to_s] || data[field.to_sym]
         value = value_for(raw_value, type)
         instance_variable_set("@#{field}", value)
       end
@@ -32,9 +32,13 @@ module Afterbanks
     def value_for(raw_value, type)
       case type
       when :boolean
-        ["1", 1].include?(raw_value)
+        [true, "1", 1].include?(raw_value)
       when :date
-        Date.parse(raw_value) if raw_value
+        if raw_value.is_a?(Date)
+          raw_value
+        else
+          Date.parse(raw_value)
+        end
       else
         raw_value
       end
@@ -50,14 +54,14 @@ module Afterbanks
       dump
     end
 
-    def marshal_load(serialized_bank)
-      keys = serialized_bank.keys
+    def marshal_load(serialized_resource)
+      keys = serialized_resource.keys
 
       keys.each do |key|
-        serialized_bank[key.to_s] = serialized_bank.delete(key)
+        serialized_resource[key.to_s] = serialized_resource.delete(key)
       end
 
-      initialize(serialized_bank)
+      initialize(serialized_resource)
     end
 
     class << self

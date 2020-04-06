@@ -182,4 +182,69 @@ describe Afterbanks::Bank do
       end
     end
   end
+
+  describe "serialization" do
+    let(:country_code) { 'ES' }
+    let(:service) { 'caixa_emp' }
+    let(:swift) { 'CAIXESBB' }
+    let(:fullname) { 'Caixabank Empresas' }
+    let(:business) { true }
+    let(:documenttype) { '0' }
+    let(:user) { 'Identificación' }
+    let(:pass) { 'PIN1' }
+    let(:pass2) { '0' }
+    let(:userdesc) { '' }
+    let(:passdesc) { '' }
+    let(:pass2desc) { '' }
+    let(:usertype) { 'text' }
+    let(:passtype) { 'text' }
+    let(:pass2type) { 'text' }
+    let(:image) { 'https://www.afterbanks.com/api/icons/caixa.min.png' }
+    let(:color) { 'B2D4F4' }
+    let(:original_bank) do
+      Afterbanks::Bank.new(
+        country_code: country_code,
+        service: service,
+        swift: swift,
+        fullname: fullname,
+        business: business,
+        documenttype: documenttype,
+        user: user,
+        pass: pass,
+        pass2: pass2,
+        userdesc: userdesc,
+        passdesc: passdesc,
+        pass2desc: pass2desc,
+        usertype: usertype,
+        passtype: passtype,
+        pass2type: pass2type,
+        image: image,
+        color: color
+      )
+    end
+
+    it "works" do
+      serialized_bank = Marshal.dump(original_bank)
+      recovered_bank = Marshal.load(serialized_bank)
+
+      expect(recovered_bank.class).to eq(Afterbanks::Bank)
+      expect(recovered_bank.country_code).to eq("ES")
+      expect(recovered_bank.service).to eq("caixa_emp")
+      expect(recovered_bank.swift).to eq("CAIXESBB")
+      expect(recovered_bank.fullname).to eq("Caixabank Empresas")
+      expect(recovered_bank.business).to be_truthy
+      expect(recovered_bank.documenttype).to eq("0")
+      expect(recovered_bank.user).to eq("Identificación")
+      expect(recovered_bank.pass).to eq("PIN1")
+      expect(recovered_bank.pass2).to eq("0")
+      expect(recovered_bank.userdesc).to eq("")
+      expect(recovered_bank.passdesc).to eq("")
+      expect(recovered_bank.pass2desc).to eq("")
+      expect(recovered_bank.usertype).to eq("text")
+      expect(recovered_bank.passtype).to eq("text")
+      expect(recovered_bank.pass2type).to eq("text")
+      expect(recovered_bank.image).to eq("https://www.afterbanks.com/api/icons/caixa.min.png")
+      expect(recovered_bank.color).to eq("B2D4F4")
+    end
+  end
 end

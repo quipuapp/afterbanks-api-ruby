@@ -349,4 +349,45 @@ describe Afterbanks::Transaction do
       end
     end
   end
+
+  describe "serialization" do
+    let(:service) { 'bbva' }
+    let(:product) { 'ES2720809591124344566256' }
+    let(:date) { Date.new(2020, 3, 16) }
+    let(:date2) { Date.new(2020, 4, 13) }
+    let(:amount) { -12.49 }
+    let(:description) { "A handful of stuff" }
+    let(:balance) { 412.62 }
+    let(:transactionId) { '123454321NZ' }
+    let(:categoryId) { 13 }
+    let(:original_transaction) do
+      Afterbanks::Transaction.new(
+        service: service,
+        product: product,
+        date: date,
+        date2: date2,
+        amount: amount,
+        description: description,
+        balance: balance,
+        transactionId: transactionId,
+        categoryId: categoryId
+      )
+    end
+
+    it "works" do
+      serialized_transaction = Marshal.dump(original_transaction)
+      recovered_transaction = Marshal.load(serialized_transaction)
+
+      expect(recovered_transaction.class).to eq(Afterbanks::Transaction)
+      expect(recovered_transaction.service).to eq(service)
+      expect(recovered_transaction.product).to eq(product)
+      expect(recovered_transaction.date).to eq(date)
+      expect(recovered_transaction.date2).to eq(date2)
+      expect(recovered_transaction.amount).to eq(amount)
+      expect(recovered_transaction.description).to eq(description)
+      expect(recovered_transaction.balance).to eq(balance)
+      expect(recovered_transaction.transactionId).to eq(transactionId)
+      expect(recovered_transaction.categoryId).to eq(categoryId)
+    end
+  end
 end
