@@ -186,6 +186,7 @@ describe Afterbanks::Account do
           expect { api_call }.to raise_error(
             an_instance_of(Afterbanks::GenericError)
               .and having_attributes(
+                code: 1,
                 message: "Error genérico"
               )
           )
@@ -206,6 +207,7 @@ describe Afterbanks::Account do
           expect { api_call }.to raise_error(
             an_instance_of(Afterbanks::ServiceUnavailableTemporarilyError)
               .and having_attributes(
+                code: 2,
                 message: "Servicio no disponible ahora mismo"
               )
           )
@@ -226,6 +228,7 @@ describe Afterbanks::Account do
           expect { api_call }.to raise_error(
             an_instance_of(Afterbanks::ConnectionDataError)
               .and having_attributes(
+                code: 3,
                 message: "Datos de la conexión inválidos"
               )
           )
@@ -246,6 +249,7 @@ describe Afterbanks::Account do
           expect { api_call }.to raise_error(
             an_instance_of(Afterbanks::AccountIdDoesNotExistError)
               .and having_attributes(
+                code: 4,
                 message: "AccountID no existe"
               )
           )
@@ -266,6 +270,7 @@ describe Afterbanks::Account do
           expect { api_call }.to raise_error(
             an_instance_of(Afterbanks::CutConnectionError)
               .and having_attributes(
+                code: 5,
                 message: "Conexión cortada"
               )
           )
@@ -286,6 +291,7 @@ describe Afterbanks::Account do
           expect { api_call }.to raise_error(
             an_instance_of(Afterbanks::HumanActionNeededError)
               .and having_attributes(
+                code: 6,
                 message: "El usuario debe realizar una acción en el banco"
               )
           )
@@ -307,6 +313,7 @@ describe Afterbanks::Account do
             expect { api_call }.to raise_error(
               an_instance_of(Afterbanks::OTPNeededError)
                 .and having_attributes(
+                  code: 50,
                   message: "A bank te ha enviado un código",
                   additional_info: {
                     "session_id" => "12345678",
@@ -331,6 +338,7 @@ describe Afterbanks::Account do
             expect { api_call }.to raise_error(
               an_instance_of(Afterbanks::AccountIdNeededError)
                 .and having_attributes(
+                  code: 50,
                   message: "No se han encontrado productos"
                 )
             )
