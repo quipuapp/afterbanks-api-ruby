@@ -103,7 +103,7 @@ module Afterbanks
         raise HumanActionNeededError.new(message: message)
       when 50
         if additional_info && additional_info['session_id']
-          raise OTPNeededError.new(
+          raise TwoStepAuthenticationError.new(
             message: message,
             additional_info: additional_info
           )

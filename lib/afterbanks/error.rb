@@ -54,7 +54,7 @@ module Afterbanks
     end
   end
 
-  class OTPNeededError < Error
+  class TwoStepAuthenticationError < Error
     def code
       50
     end

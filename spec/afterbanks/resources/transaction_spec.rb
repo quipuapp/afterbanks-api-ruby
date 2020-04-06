@@ -150,7 +150,7 @@ describe Afterbanks::Transaction do
         include_examples "proper request and data parsing"
       end
 
-      context "for an OTP case" do
+      context "for a two step authentication case" do
         let(:body) {
           {
             "servicekey" => 'a_servicekey_which_works',
@@ -309,7 +309,7 @@ describe Afterbanks::Transaction do
       end
 
       context "which needs for another parameter (code 50)" do
-        context "which is OTP" do
+        context "which is two step authentication" do
           before do
             stub_request(:post, "https://api.afterbanks.com/V3/").
               with(body: body).
@@ -319,9 +319,9 @@ describe Afterbanks::Transaction do
               )
           end
 
-          it "raises an OTPNeededError" do
+          it "raises an TwoStepAuthenticationError" do
             expect { api_call }.to raise_error(
-              an_instance_of(Afterbanks::OTPNeededError)
+              an_instance_of(Afterbanks::TwoStepAuthenticationError)
                 .and having_attributes(
                   code: 50,
                   message: "A bank te ha enviado un código",
