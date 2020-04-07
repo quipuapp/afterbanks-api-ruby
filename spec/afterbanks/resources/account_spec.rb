@@ -317,8 +317,8 @@ describe Afterbanks::Account do
               with(body: body).
               to_return(
                 status: 200,
-                body: response_json(resource: 'common', action: 'error_50_otp'),
-                headers: { debug_id: 'debugerror50otp' }
+                body: response_json(resource: 'common', action: 'error_50_two_way_authentication'),
+                headers: { debug_id: 'debugerror50tsa' }
               )
           end
 
@@ -328,7 +328,7 @@ describe Afterbanks::Account do
                 .and having_attributes(
                   code: 50,
                   message: "A bank te ha enviado un código",
-                  debug_id: 'debugerror50otp',
+                  debug_id: 'debugerror50tsa',
                   additional_info: {
                     "session_id" => "12345678",
                     "counterId" => 4
