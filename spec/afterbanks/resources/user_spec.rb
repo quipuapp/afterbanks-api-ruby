@@ -11,12 +11,18 @@ describe Afterbanks::User do
         ).
         to_return(
           status: 200,
-          body: response_json(resource: 'user', action: 'get')
+          body: response_json(resource: 'user', action: 'get'),
+          headers: { debug_id: 'usrget1234' }
         )
     end
 
     it "works" do
-      user = Afterbanks::User.get
+      response = Afterbanks::User.get
+
+      expect(response.class).to eq(Afterbanks::Response)
+      expect(response.debug_id).to eq('usrget1234')
+
+      user = response.result
 
       expect(user.class).to eq(Afterbanks::User)
       expect(user.limit).to eq(1234391245)

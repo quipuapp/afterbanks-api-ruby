@@ -3,6 +3,7 @@ require 'afterbanks/configuration'
 require 'afterbanks/base'
 require 'afterbanks/error'
 require 'afterbanks/resource'
+require 'afterbanks/response'
 require 'afterbanks/collection'
 
 require 'afterbanks/resources/user'

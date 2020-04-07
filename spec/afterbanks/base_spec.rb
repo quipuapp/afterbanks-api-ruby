@@ -146,7 +146,8 @@ describe Afterbanks do
         "pass2: <masked>",
         "d: e",
       ].each do |unique_message|
-        expect(subject).to receive(:log_message).with(unique_message).once
+        expect(subject)
+          .to receive(:log_message).with(message: unique_message).once
       end
 
       log_request
@@ -164,7 +165,8 @@ describe Afterbanks do
           "* Debug ID: abcd",
           "* No params"
         ].each do |unique_message|
-          expect(subject).to receive(:log_message).with(unique_message).once
+          expect(subject)
+            .to receive(:log_message).with(message: unique_message).once
         end
 
         log_request
@@ -191,7 +193,8 @@ describe Afterbanks do
           "pass2: <masked>",
           "d: e",
         ].each do |unique_message|
-          expect(subject).to receive(:log_message).with(unique_message).once
+          expect(subject)
+            .to receive(:log_message).with(message: unique_message).once
         end
 
         log_request
@@ -208,7 +211,7 @@ describe Afterbanks do
       it "does not call the logger" do
         expect(Logger).not_to receive(:new)
 
-        subject.log_message(nil)
+        subject.log_message(message: nil)
       end
     end
 
@@ -223,7 +226,7 @@ describe Afterbanks do
         it "does not call the logger" do
           expect_any_instance_of(Logger).not_to receive(:info)
 
-          subject.log_message("cucamonga")
+          subject.log_message(message: "cucamonga")
         end
       end
 
@@ -238,9 +241,10 @@ describe Afterbanks do
         end
 
         it "calls the logger properly" do
-          expect(Afterbanks.configuration.logger).to receive(:info).with("cucamonga").once
+          expect(Afterbanks.configuration.logger)
+            .to receive(:info).with("cucamonga").once
 
-          subject.log_message("cucamonga")
+          subject.log_message(message: "cucamonga")
         end
       end
     end

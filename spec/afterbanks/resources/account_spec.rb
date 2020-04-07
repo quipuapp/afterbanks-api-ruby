@@ -29,12 +29,18 @@ describe Afterbanks::Account do
             with(body: body).
             to_return(
               status: 200,
-              body: response_json(resource: 'account', action: 'list')
+              body: response_json(resource: 'account', action: 'list'),
+              headers: { debug_id: 'acclist1234' }
             )
         end
 
         it "does the proper request and returns the proper Afterbanks::Account instances" do
-          accounts = api_call
+          response = api_call
+
+          expect(response.class).to eq(Afterbanks::Response)
+          expect(response.debug_id).to eq('acclist1234')
+
+          accounts = response.result
 
           expect(accounts.class).to eq(Afterbanks::Collection)
           expect(accounts.size).to eq(3)
@@ -178,7 +184,8 @@ describe Afterbanks::Account do
             with(body: body).
             to_return(
               status: 400,
-              body: response_json(resource: 'common', action: 'error_1')
+              body: response_json(resource: 'common', action: 'error_1'),
+              headers: { debug_id: 'debugerror1' }
             )
         end
 
@@ -199,7 +206,8 @@ describe Afterbanks::Account do
             with(body: body).
             to_return(
               status: 200,
-              body: response_json(resource: 'common', action: 'error_2')
+              body: response_json(resource: 'common', action: 'error_2'),
+              headers: { debug_id: 'debugerror2' }
             )
         end
 
@@ -220,7 +228,8 @@ describe Afterbanks::Account do
             with(body: body).
             to_return(
               status: 417,
-              body: response_json(resource: 'common', action: 'error_3')
+              body: response_json(resource: 'common', action: 'error_3'),
+              headers: { debug_id: 'debugerror3' }
             )
         end
 
@@ -241,7 +250,8 @@ describe Afterbanks::Account do
             with(body: body).
             to_return(
               status: 200,
-              body: response_json(resource: 'common', action: 'error_4')
+              body: response_json(resource: 'common', action: 'error_4'),
+              headers: { debug_id: 'debugerror4' }
             )
         end
 
@@ -262,7 +272,8 @@ describe Afterbanks::Account do
             with(body: body).
             to_return(
               status: 200,
-              body: response_json(resource: 'common', action: 'error_5')
+              body: response_json(resource: 'common', action: 'error_5'),
+              headers: { debug_id: 'debugerror5' }
             )
         end
 
@@ -283,7 +294,8 @@ describe Afterbanks::Account do
             with(body: body).
             to_return(
               status: 200,
-              body: response_json(resource: 'common', action: 'error_6')
+              body: response_json(resource: 'common', action: 'error_6'),
+              headers: { debug_id: 'debugerror6' }
             )
         end
 
@@ -305,7 +317,8 @@ describe Afterbanks::Account do
               with(body: body).
               to_return(
                 status: 200,
-                body: response_json(resource: 'common', action: 'error_50_otp')
+                body: response_json(resource: 'common', action: 'error_50_otp'),
+                headers: { debug_id: 'debugerror50otp' }
               )
           end
 
@@ -315,6 +328,7 @@ describe Afterbanks::Account do
                 .and having_attributes(
                   code: 50,
                   message: "A bank te ha enviado un código",
+                  debug_id: 'debugerror50otp',
                   additional_info: {
                     "session_id" => "12345678",
                     "counterId" => 4
@@ -330,7 +344,8 @@ describe Afterbanks::Account do
               with(body: body).
               to_return(
                 status: 200,
-                body: response_json(resource: 'common', action: 'error_50_account_id')
+                body: response_json(resource: 'common', action: 'error_50_account_id'),
+                headers: { debug_id: 'debugerror50accid' }
               )
           end
 
@@ -339,7 +354,8 @@ describe Afterbanks::Account do
               an_instance_of(Afterbanks::AccountIdNeededError)
                 .and having_attributes(
                   code: 50,
-                  message: "No se han encontrado productos"
+                  message: "No se han encontrado productos",
+                  debug_id: 'debugerror50accid'
                 )
             )
           end

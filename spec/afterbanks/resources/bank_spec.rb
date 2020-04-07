@@ -6,12 +6,18 @@ describe Afterbanks::Bank do
       stub_request(:get, "https://api.afterbanks.com/forms/").
         to_return(
           status: 200,
-          body: response_json(resource: 'bank', action: 'list')
+          body: response_json(resource: 'bank', action: 'list'),
+          headers: { debug_id: 'banklist1234' }
         )
     end
 
     it "returns the proper Afterbanks::Bank instances" do
-      banks = Afterbanks::Bank.list
+      response = Afterbanks::Bank.list
+
+      expect(response.class).to eq(Afterbanks::Response)
+      expect(response.debug_id).to eq('banklist1234')
+
+      banks = response.result
 
       expect(banks.class).to eq(Afterbanks::Collection)
       expect(banks.size).to eq(4)
@@ -97,7 +103,12 @@ describe Afterbanks::Bank do
 
     context "when passing the :ordered flag" do
       it "returns the proper Afterbanks::Bank instances ordered by fullname" do
-        banks = Afterbanks::Bank.list(ordered: true)
+        response = Afterbanks::Bank.list(ordered: true)
+
+        expect(response.class).to eq(Afterbanks::Response)
+        expect(response.debug_id).to eq('banklist1234')
+
+        banks = response.result
 
         expect(banks.class).to eq(Afterbanks::Collection)
         expect(banks.size).to eq(4)

@@ -34,12 +34,18 @@ describe Afterbanks::Transaction do
             with(body: body).
             to_return(
               status: 200,
-              body: response_json(resource: 'transaction', action: 'list')
+              body: response_json(resource: 'transaction', action: 'list'),
+              headers: { debug_id: 'translist1234' }
             )
         end
 
-        it "does the proper request and returns the proper Afterbanks::Transaction instances" do
-          transactions = api_call
+        it "does the proper request and returns the proper Afterbanks::Response with the debugId and the proper Afterbanks::Transaction instances" do
+          response = api_call
+
+          expect(response.class).to eq(Afterbanks::Response)
+          expect(response.debug_id).to eq('translist1234')
+
+          transactions = response.result
 
           expect(transactions.class).to eq(Afterbanks::Collection)
           expect(transactions.size).to eq(4)
@@ -188,7 +194,8 @@ describe Afterbanks::Transaction do
             with(body: body).
             to_return(
               status: 400,
-              body: response_json(resource: 'common', action: 'error_1')
+              body: response_json(resource: 'common', action: 'error_1'),
+              headers: { debug_id: 'debugerror1' }
             )
         end
 
@@ -197,7 +204,8 @@ describe Afterbanks::Transaction do
             an_instance_of(Afterbanks::GenericError)
               .and having_attributes(
                 code: 1,
-                message: "Error genérico"
+                message: "Error genérico",
+                debug_id: 'debugerror1'
               )
           )
         end
@@ -209,7 +217,8 @@ describe Afterbanks::Transaction do
             with(body: body).
             to_return(
               status: 200,
-              body: response_json(resource: 'common', action: 'error_2')
+              body: response_json(resource: 'common', action: 'error_2'),
+              headers: { debug_id: 'debugerror2' }
             )
         end
 
@@ -218,7 +227,8 @@ describe Afterbanks::Transaction do
             an_instance_of(Afterbanks::ServiceUnavailableTemporarilyError)
               .and having_attributes(
                 code: 2,
-                message: "Servicio no disponible ahora mismo"
+                message: "Servicio no disponible ahora mismo",
+                debug_id: 'debugerror2'
               )
           )
         end
@@ -230,7 +240,8 @@ describe Afterbanks::Transaction do
             with(body: body).
             to_return(
               status: 417,
-              body: response_json(resource: 'common', action: 'error_3')
+              body: response_json(resource: 'common', action: 'error_3'),
+              headers: { debug_id: 'debugerror3' }
             )
         end
 
@@ -239,7 +250,8 @@ describe Afterbanks::Transaction do
             an_instance_of(Afterbanks::ConnectionDataError)
               .and having_attributes(
                 code: 3,
-                message: "Datos de la conexión inválidos"
+                message: "Datos de la conexión inválidos",
+                debug_id: 'debugerror3'
               )
           )
         end
@@ -251,7 +263,8 @@ describe Afterbanks::Transaction do
             with(body: body).
             to_return(
               status: 200,
-              body: response_json(resource: 'common', action: 'error_4')
+              body: response_json(resource: 'common', action: 'error_4'),
+              headers: { debug_id: 'debugerror4' }
             )
         end
 
@@ -260,7 +273,8 @@ describe Afterbanks::Transaction do
             an_instance_of(Afterbanks::AccountIdDoesNotExistError)
               .and having_attributes(
                 code: 4,
-                message: "AccountID no existe"
+                message: "AccountID no existe",
+                debug_id: 'debugerror4'
               )
           )
         end
@@ -272,7 +286,8 @@ describe Afterbanks::Transaction do
             with(body: body).
             to_return(
               status: 200,
-              body: response_json(resource: 'common', action: 'error_5')
+              body: response_json(resource: 'common', action: 'error_5'),
+              headers: { debug_id: 'debugerror5' }
             )
         end
 
@@ -281,7 +296,8 @@ describe Afterbanks::Transaction do
             an_instance_of(Afterbanks::CutConnectionError)
               .and having_attributes(
                 code: 5,
-                message: "Conexión cortada"
+                message: "Conexión cortada",
+                debug_id: 'debugerror5'
               )
           )
         end
@@ -293,7 +309,8 @@ describe Afterbanks::Transaction do
             with(body: body).
             to_return(
               status: 200,
-              body: response_json(resource: 'common', action: 'error_6')
+              body: response_json(resource: 'common', action: 'error_6'),
+              headers: { debug_id: 'debugerror6' }
             )
         end
 
@@ -302,7 +319,8 @@ describe Afterbanks::Transaction do
             an_instance_of(Afterbanks::HumanActionNeededError)
               .and having_attributes(
                 code: 6,
-                message: "El usuario debe realizar una acción en el banco"
+                message: "El usuario debe realizar una acción en el banco",
+                debug_id: 'debugerror6'
               )
           )
         end
@@ -315,7 +333,8 @@ describe Afterbanks::Transaction do
               with(body: body).
               to_return(
                 status: 200,
-                body: response_json(resource: 'common', action: 'error_50_otp')
+                body: response_json(resource: 'common', action: 'error_50_otp'),
+                headers: { debug_id: 'debugerror50otp' }
               )
           end
 
@@ -325,6 +344,7 @@ describe Afterbanks::Transaction do
                 .and having_attributes(
                   code: 50,
                   message: "A bank te ha enviado un código",
+                  debug_id: 'debugerror50otp',
                   additional_info: {
                     "session_id" => "12345678",
                     "counterId" => 4
@@ -340,7 +360,8 @@ describe Afterbanks::Transaction do
               with(body: body).
               to_return(
                 status: 200,
-                body: response_json(resource: 'common', action: 'error_50_account_id')
+                body: response_json(resource: 'common', action: 'error_50_account_id'),
+                headers: { debug_id: 'debugerror50accid' }
               )
           end
 
@@ -349,7 +370,8 @@ describe Afterbanks::Transaction do
               an_instance_of(Afterbanks::AccountIdNeededError)
                 .and having_attributes(
                   code: 50,
-                  message: "No se han encontrado productos"
+                  message: "No se han encontrado productos",
+                  debug_id: 'debugerror50accid'
                 )
             )
           end

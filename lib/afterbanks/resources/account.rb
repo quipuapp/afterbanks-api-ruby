@@ -27,18 +27,21 @@ module Afterbanks
       params.merge!(OTP: otp) unless otp.nil?
       params.merge!(counterId: counter_id) unless counter_id.nil?
 
-      response = Afterbanks.api_call(
+      response, debug_id = Afterbanks.api_call(
         method: :post,
         path: '/V3/',
         params: params
       )
 
-      Collection.new(
-        accounts_information_for(
-          response: response,
-          service: service
+      Response.new(
+        result: Collection.new(
+          accounts_information_for(
+            response: response,
+            service: service
+          ),
+          self
         ),
-        self
+        debug_id: debug_id
       )
     end
 

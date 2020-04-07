@@ -30,32 +30,37 @@ module Afterbanks
         bad_request.response
       end
 
+      debug_id = response.headers[:debug_id]
+
       log_request(
         method: method,
         url: url,
         params: params,
-        debug_id: response.headers[:debug_id]
+        debug_id: debug_id
       )
 
       response_body = JSON.parse(response.body)
 
-      treat_errors_if_any(response_body)
+      treat_errors_if_any(
+        response_body: response_body,
+        debug_id: debug_id
+      )
 
-      response_body
+      [response_body, debug_id]
     end
 
     def log_request(method:, url:, params: {}, debug_id: nil)
       now = Time.now
 
-      log_message("")
-      log_message("=> #{method.upcase} #{url}")
+      log_message(message: "")
+      log_message(message: "=> #{method.upcase} #{url}")
 
-      log_message("* Time: #{now}")
-      log_message("* Timestamp: #{now.to_i}")
-      log_message("* Debug ID: #{debug_id || 'none'}")
+      log_message(message: "* Time: #{now}")
+      log_message(message: "* Timestamp: #{now.to_i}")
+      log_message(message: "* Debug ID: #{debug_id || 'none'}")
 
       if params.any?
-        log_message("* Params")
+        log_message(message: "* Params")
         params.each do |key, value|
           safe_value = if %w{servicekey user pass pass2}.include?(key.to_s)
                          "<masked>"
@@ -63,14 +68,14 @@ module Afterbanks
                          value
                        end
 
-          log_message("#{key}: #{safe_value}")
+          log_message(message: "#{key}: #{safe_value}")
         end
       else
-        log_message("* No params")
+        log_message(message: "* No params")
       end
     end
 
-    def log_message(message)
+    def log_message(message: nil)
       return if message.nil?
 
       logger = Afterbanks.configuration.logger
@@ -81,35 +86,36 @@ module Afterbanks
 
     private
 
-    def treat_errors_if_any(response_body)
+    def treat_errors_if_any(response_body:, debug_id:)
       return unless response_body.is_a?(Hash)
 
       code = response_body['code']
       message = response_body['message']
       additional_info = response_body['additional_info']
 
+      error_info = { message: message, debug_id: debug_id }
+
       case code
       when 1
-        raise GenericError.new(message: message)
+        raise GenericError.new(error_info)
       when 2
-        raise ServiceUnavailableTemporarilyError.new(message: message)
+        raise ServiceUnavailableTemporarilyError.new(error_info)
       when 3
-        raise ConnectionDataError.new(message: message)
+        raise ConnectionDataError.new(error_info)
       when 4
-        raise AccountIdDoesNotExistError.new(message: message)
+        raise AccountIdDoesNotExistError.new(error_info)
       when 5
-        raise CutConnectionError.new(message: message)
+        raise CutConnectionError.new(error_info)
       when 6
-        raise HumanActionNeededError.new(message: message)
+        raise HumanActionNeededError.new(error_info)
       when 50
         if additional_info && additional_info['session_id']
           raise TwoStepAuthenticationError.new(
-            message: message,
-            additional_info: additional_info
+            error_info.merge(additional_info: additional_info)
           )
         end
 
-        raise AccountIdNeededError.new(message: message)
+        raise AccountIdNeededError.new(error_info)
       end
 
       nil

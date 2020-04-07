@@ -19,7 +19,7 @@ module Afterbanks
                color: :string
 
     def self.list(ordered: false)
-      response = Afterbanks.api_call(
+      response, debug_id = Afterbanks.api_call(
         method: :get,
         path: '/forms/'
       )
@@ -30,11 +30,14 @@ module Afterbanks
         end
       end
 
-      Collection.new(
-        banks_information_for(
-          response: response
+      Response.new(
+        result: Collection.new(
+          banks_information_for(
+            response: response
+          ),
+          self
         ),
-        self
+        debug_id: debug_id
       )
     end
 
