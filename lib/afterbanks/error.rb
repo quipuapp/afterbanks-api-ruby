@@ -60,4 +60,10 @@ module Afterbanks
       50
     end
   end
+
+  class MissingParameterError < Error
+    def code
+      50
+    end
+  end
 end

@@ -109,13 +109,17 @@ module Afterbanks
       when 6
         raise HumanActionNeededError.new(error_info)
       when 50
-        if additional_info && additional_info['session_id']
-          raise TwoStepAuthenticationError.new(
-            error_info.merge(additional_info: additional_info)
-          )
+        unless additional_info
+          raise MissingParameterError.new(error_info)
         end
 
-        raise AccountIdNeededError.new(error_info)
+        error_info.merge!(additional_info: additional_info)
+
+        if additional_info['session_id']
+          raise TwoStepAuthenticationError.new(error_info)
+        else
+          raise AccountIdNeededError.new(error_info)
+        end
       end
 
       nil

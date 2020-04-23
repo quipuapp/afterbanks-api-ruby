@@ -355,7 +355,33 @@ describe Afterbanks::Account do
                 .and having_attributes(
                   code: 50,
                   message: "No se han encontrado productos",
-                  debug_id: 'debugerror50accid'
+                  debug_id: 'debugerror50accid',
+                  additional_info: {
+                    "counterId" => 3
+                  }
+                )
+            )
+          end
+        end
+
+        context "which is another one" do
+          before do
+            stub_request(:post, "https://api.afterbanks.com/V3/").
+              with(body: body).
+              to_return(
+                status: 200,
+                body: response_json(resource: 'common', action: 'error_50_missing_parameter'),
+                headers: { debug_id: 'debugerror50missparam' }
+              )
+          end
+
+          it "raises an MissingParameterError" do
+            expect { api_call }.to raise_error(
+              an_instance_of(Afterbanks::MissingParameterError)
+                .and having_attributes(
+                  code: 50,
+                  message: "Falta el servicekey",
+                  debug_id: 'debugerror50missparam'
                 )
             )
           end
