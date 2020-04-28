@@ -1,0 +1,103 @@
+[
+  {
+    "product": "ES2720809591124344566256",
+    "type": "checking",
+    "balance": 1094.12,
+    "currency": "EUR",
+    "description": "A checking account",
+    "iban": "ES2720809591124344566256",
+    "is_owner": 1,
+    "holders": [
+      {
+        "role": "Admin",
+        "name": "Mary",
+        "id": 1
+      },
+      {
+        "role": "Admin",
+        "name": "Liz",
+        "id": 2
+      },
+      {
+        "role": "Supervisor",
+        "name": "John",
+        "id": 3
+      }
+    ],
+    "transactions": [
+      {
+        "date": "01-02-2020",
+        "date2": "02-02-2020",
+        "amount": 123.11,
+        "description": "Some money in",
+        "balance": 1094.12,
+        "transactionId": "abcd1234",
+        "categoryId": 19
+      },
+      {
+        "date": "20-01-2020",
+        "date2": "20-01-2020",
+        "amount": -29.58,
+        "description": "A small purchase",
+        "balance": 971.01,
+        "transactionId": "defg4321",
+        "categoryId": 6
+      },
+      {
+        "date": "15-01-2020",
+        "date2": "15-01-2020",
+        "amount": -467.12,
+        "description": "A big purchase",
+        "balance": 1000.59,
+        "transactionId": "ghij1928",
+        "categoryId": 12
+      },
+      {
+        "date": "01-01-2019",
+        "date2": "01-01-2019",
+        "amount": 1467.71,
+        "description": "Initial transaction",
+        "balance": 1467.71,
+        "transactionId": "jklm5647",
+        "categoryId": 3
+      }
+    ]
+  },
+  {
+    "product": "ES8401821618664757634169",
+    "type": "checking",
+    "balance": 216.19,
+    "currency": "EUR",
+    "description": "Another checking account",
+    "iban": "ES8401821618664757634169",
+    "is_owner": 1,
+    "holders": [
+      {
+        "role": "Admin",
+        "name": "Mary",
+        "id": 11
+      }
+    ]
+  },
+  {
+    "product": "ES9231902434113168967688",
+    "type": "loan",
+    "balance": -91.99,
+    "currency": "USD",
+    "description": "A loan",
+    "iban": "ES9231902434113168967688",
+    "is_owner": 0,
+    "holders": [
+      {
+        "role": "Admin",
+        "name": "Sandy",
+        "id": 12
+      },
+      {
+        "role": "Supervisor",
+        "name": "Joe",
+        "id": 34
+      }
+    ]
+  }
+]

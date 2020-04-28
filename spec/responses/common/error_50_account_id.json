@@ -1,0 +1,7 @@
+{
+  "message": "No se han encontrado productos",
+  "code": 50,
+  "additional_info": {
+    "counterId": 3
+  }
+}

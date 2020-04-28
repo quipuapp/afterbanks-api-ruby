@@ -1,0 +1,8 @@
+{
+  "message": "A bank te ha enviado un código",
+  "code": 50,
+  "additional_info": {
+    "session_id": "12345678",
+    "counterId": 4
+  }
+}
