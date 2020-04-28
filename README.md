@@ -4,11 +4,6 @@
 
 This is a Ruby client for the Afterbanks' API
 
-Changelog
----------
-
-* v.0.1.0 First vull version, including resource wrapping (for banks, accounts, transactions and the user) and separate exceptions for each different code.
-
 Installation
 ---------
 
@@ -34,6 +29,12 @@ end
 ```
 
 You can set a `logger` as well.
+
+Changelog
+---------
+
+* v.0.1.0 First vull version, including resource wrapping (for banks, accounts, transactions and the user) and separate exceptions for each different code.
+* v.0.1.1 Fix rake security issue and remove specific Ruby version dependency.
 
 TODO
 ----
