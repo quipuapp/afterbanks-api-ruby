@@ -175,6 +175,34 @@ describe Afterbanks::Account do
 
         include_examples "proper request and data parsing"
       end
+
+      context "for a case when we have to avoid caching" do
+        before do
+          Timecop.freeze(2019, 12, 3, 17, 22)
+        end
+
+        let(:body) {
+          {
+            "servicekey" => 'a_servicekey_which_works',
+            "service" => service,
+            "user" => username,
+            "pass" => password,
+            "products" => 'GLOBAL',
+            "randomizer" => '1575390120'
+          }
+        }
+
+        let(:api_call) {
+          Afterbanks::Account.list(
+            service: service,
+            username: username,
+            password: password,
+            avoid_caching: true
+          )
+        }
+
+        include_examples "proper request and data parsing"
+      end
     end
 
     context "when returning an error" do
