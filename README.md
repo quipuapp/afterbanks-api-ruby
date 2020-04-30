@@ -33,7 +33,8 @@ You can set a `logger` as well.
 Changelog
 ---------
 
-* v.0.2.1 Better naming for banks
+* v.0.2.2 Better naming (fix Caixa Guissona, Caixa Burriana and Banco Pichincha)
+* v.0.2.1 Better naming for banks (add Particulares for the proper ones, and use Caixa Enginyers)
 * v.0.2.0 Allow adding an (opt-in) random parameter to Afterbanks::Account.list to avoid caching
 * v.0.1.1 Fix rake security issue and remove specific Ruby version dependency.
 * v.0.1.0 First vull version, including resource wrapping (for banks, accounts, transactions and the user) and separate exceptions for each different code.
