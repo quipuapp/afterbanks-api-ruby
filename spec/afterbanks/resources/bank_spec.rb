@@ -11,7 +11,12 @@ describe Afterbanks::Bank do
         )
     end
 
-    it "returns the proper Afterbanks::Bank instances" do
+    it "returns the proper Afterbanks::Bank instances with the adequate name changes" do
+      # Name changes:
+      # 1. Add Particulares if there are different personal/company endpoints
+      # 2. Add Empresas following the same reason
+      # 3. Rename Caja Ingenieros into Caixa d'Enginyers
+
       response = Afterbanks::Bank.list
 
       expect(response.class).to eq(Afterbanks::Response)
@@ -20,9 +25,9 @@ describe Afterbanks::Bank do
       banks = response.result
 
       expect(banks.class).to eq(Afterbanks::Collection)
-      expect(banks.size).to eq(4)
+      expect(banks.size).to eq(6)
 
-      bank1, bank2, bank3, bank4 = banks
+      bank1, bank2, bank3, bank4, bank5, bank6 = banks
 
       expect(bank1.class).to eq(Afterbanks::Bank)
       expect(bank1.country_code).to eq("ES")
@@ -47,7 +52,7 @@ describe Afterbanks::Bank do
       expect(bank2.country_code).to eq("ES")
       expect(bank2.service).to eq("bbva")
       expect(bank2.swift).to eq("BBVAESMM")
-      expect(bank2.fullname).to eq("BBVA")
+      expect(bank2.fullname).to eq("BBVA Particulares")
       expect(bank2.business).to be_falsey
       expect(bank2.documenttype).to eq("0")
       expect(bank2.user).to eq("Usuario")
@@ -64,45 +69,83 @@ describe Afterbanks::Bank do
 
       expect(bank3.class).to eq(Afterbanks::Bank)
       expect(bank3.country_code).to eq("ES")
-      expect(bank3.service).to eq("caixa_emp")
-      expect(bank3.swift).to eq("CAIXESBB")
-      expect(bank3.fullname).to eq("Caixabank Empresas")
+      expect(bank3.service).to eq("bbva_emp")
+      expect(bank3.swift).to eq("BBVAESMM")
+      expect(bank3.fullname).to eq("BBVA Net Cash Empresas")
       expect(bank3.business).to be_truthy
       expect(bank3.documenttype).to eq("0")
-      expect(bank3.user).to eq("Identificación")
-      expect(bank3.pass).to eq("PIN1")
-      expect(bank3.pass2).to eq("0")
+      expect(bank3.user).to eq("Código de empresa")
+      expect(bank3.pass).to eq("Usuario")
+      expect(bank3.pass2).to eq("Contraseña")
       expect(bank3.userdesc).to eq("")
       expect(bank3.passdesc).to eq("")
       expect(bank3.pass2desc).to eq("")
       expect(bank3.usertype).to eq("text")
       expect(bank3.passtype).to eq("text")
       expect(bank3.pass2type).to eq("text")
-      expect(bank3.image).to eq("https://www.afterbanks.com/api/icons/caixa.min.png")
-      expect(bank3.color).to eq("B2D4F4")
+      expect(bank3.image).to eq("https://www.afterbanks.com/api/icons/bbva.min.png")
+      expect(bank3.color).to eq("BBC6E1")
 
       expect(bank4.class).to eq(Afterbanks::Bank)
       expect(bank4.country_code).to eq("ES")
-      expect(bank4.service).to eq("sabadell")
-      expect(bank4.swift).to eq("BSABESBB")
-      expect(bank4.fullname).to eq("Banco Sabadell")
-      expect(bank4.business).to be_falsey
+      expect(bank4.service).to eq("caixa_emp")
+      expect(bank4.swift).to eq("CAIXESBB")
+      expect(bank4.fullname).to eq("Caixabank Empresas")
+      expect(bank4.business).to be_truthy
       expect(bank4.documenttype).to eq("0")
-      expect(bank4.user).to eq("Usuario")
-      expect(bank4.pass).to eq("Clave de acceso")
+      expect(bank4.user).to eq("Identificación")
+      expect(bank4.pass).to eq("PIN1")
       expect(bank4.pass2).to eq("0")
       expect(bank4.userdesc).to eq("")
       expect(bank4.passdesc).to eq("")
       expect(bank4.pass2desc).to eq("")
       expect(bank4.usertype).to eq("text")
-      expect(bank4.passtype).to eq("tel")
+      expect(bank4.passtype).to eq("text")
       expect(bank4.pass2type).to eq("text")
-      expect(bank4.image).to eq("https://www.afterbanks.com/api/icons/sabadell.min.png")
-      expect(bank4.color).to eq("B2E0EF")
+      expect(bank4.image).to eq("https://www.afterbanks.com/api/icons/caixa.min.png")
+      expect(bank4.color).to eq("B2D4F4")
+
+      expect(bank5.class).to eq(Afterbanks::Bank)
+      expect(bank5.country_code).to eq("ES")
+      expect(bank5.service).to eq("cajaingenieros")
+      expect(bank5.swift).to eq("CDENESBB")
+      expect(bank5.fullname).to eq("Caixa d'Enginyers")
+      expect(bank5.business).to be_falsey
+      expect(bank5.documenttype).to eq("0")
+      expect(bank5.user).to eq("Código de usuario")
+      expect(bank5.pass).to eq("Clave de acceso")
+      expect(bank5.pass2).to eq("0")
+      expect(bank5.userdesc).to eq("")
+      expect(bank5.passdesc).to eq("")
+      expect(bank5.pass2desc).to eq("")
+      expect(bank5.usertype).to eq("text")
+      expect(bank5.passtype).to eq("tel")
+      expect(bank5.pass2type).to eq("text")
+      expect(bank5.image).to eq("https://www.afterbanks.com/api/icons/cajaingenieros.min.png")
+      expect(bank5.color).to eq("6FC1FF")
+
+      expect(bank6.class).to eq(Afterbanks::Bank)
+      expect(bank6.country_code).to eq("ES")
+      expect(bank6.service).to eq("sabadell")
+      expect(bank6.swift).to eq("BSABESBB")
+      expect(bank6.fullname).to eq("Banco Sabadell")
+      expect(bank6.business).to be_falsey
+      expect(bank6.documenttype).to eq("0")
+      expect(bank6.user).to eq("Usuario")
+      expect(bank6.pass).to eq("Clave de acceso")
+      expect(bank6.pass2).to eq("0")
+      expect(bank6.userdesc).to eq("")
+      expect(bank6.passdesc).to eq("")
+      expect(bank6.pass2desc).to eq("")
+      expect(bank6.usertype).to eq("text")
+      expect(bank6.passtype).to eq("tel")
+      expect(bank6.pass2type).to eq("text")
+      expect(bank6.image).to eq("https://www.afterbanks.com/api/icons/sabadell.min.png")
+      expect(bank6.color).to eq("B2E0EF")
     end
 
     context "when passing the :ordered flag" do
-      it "returns the proper Afterbanks::Bank instances ordered by fullname" do
+      it "returns the proper Afterbanks::Bank instances with the adequate name changes,  ordered by fullname" do
         response = Afterbanks::Bank.list(ordered: true)
 
         expect(response.class).to eq(Afterbanks::Response)
@@ -111,9 +154,9 @@ describe Afterbanks::Bank do
         banks = response.result
 
         expect(banks.class).to eq(Afterbanks::Collection)
-        expect(banks.size).to eq(4)
+        expect(banks.size).to eq(6)
 
-        bank1, bank2, bank3, bank4 = banks
+        bank1, bank2, bank3, bank4, bank5, bank6 = banks
 
         expect(bank1.class).to eq(Afterbanks::Bank)
         expect(bank1.country_code).to eq("ES")
@@ -136,14 +179,14 @@ describe Afterbanks::Bank do
 
         expect(bank2.class).to eq(Afterbanks::Bank)
         expect(bank2.country_code).to eq("ES")
-        expect(bank2.service).to eq("bbva")
+        expect(bank2.service).to eq("bbva_emp")
         expect(bank2.swift).to eq("BBVAESMM")
-        expect(bank2.fullname).to eq("BBVA")
-        expect(bank2.business).to be_falsey
+        expect(bank2.fullname).to eq("BBVA Net Cash Empresas")
+        expect(bank2.business).to be_truthy
         expect(bank2.documenttype).to eq("0")
-        expect(bank2.user).to eq("Usuario")
-        expect(bank2.pass).to eq("Clave")
-        expect(bank2.pass2).to eq("0")
+        expect(bank2.user).to eq("Código de empresa")
+        expect(bank2.pass).to eq("Usuario")
+        expect(bank2.pass2).to eq("Contraseña")
         expect(bank2.userdesc).to eq("")
         expect(bank2.passdesc).to eq("")
         expect(bank2.pass2desc).to eq("")
@@ -155,13 +198,13 @@ describe Afterbanks::Bank do
 
         expect(bank3.class).to eq(Afterbanks::Bank)
         expect(bank3.country_code).to eq("ES")
-        expect(bank3.service).to eq("caixa_emp")
-        expect(bank3.swift).to eq("CAIXESBB")
-        expect(bank3.fullname).to eq("Caixabank Empresas")
-        expect(bank3.business).to be_truthy
+        expect(bank3.service).to eq("bbva")
+        expect(bank3.swift).to eq("BBVAESMM")
+        expect(bank3.fullname).to eq("BBVA Particulares")
+        expect(bank3.business).to be_falsey
         expect(bank3.documenttype).to eq("0")
-        expect(bank3.user).to eq("Identificación")
-        expect(bank3.pass).to eq("PIN1")
+        expect(bank3.user).to eq("Usuario")
+        expect(bank3.pass).to eq("Clave")
         expect(bank3.pass2).to eq("0")
         expect(bank3.userdesc).to eq("")
         expect(bank3.passdesc).to eq("")
@@ -169,27 +212,65 @@ describe Afterbanks::Bank do
         expect(bank3.usertype).to eq("text")
         expect(bank3.passtype).to eq("text")
         expect(bank3.pass2type).to eq("text")
-        expect(bank3.image).to eq("https://www.afterbanks.com/api/icons/caixa.min.png")
-        expect(bank3.color).to eq("B2D4F4")
+        expect(bank3.image).to eq("https://www.afterbanks.com/api/icons/bbva.min.png")
+        expect(bank3.color).to eq("BBC6E1")
 
         expect(bank4.class).to eq(Afterbanks::Bank)
         expect(bank4.country_code).to eq("ES")
-        expect(bank4.service).to eq("N26")
-        expect(bank4.swift).to eq("NTSBDEB1")
-        expect(bank4.fullname).to eq("N26")
+        expect(bank4.service).to eq("cajaingenieros")
+        expect(bank4.swift).to eq("CDENESBB")
+        expect(bank4.fullname).to eq("Caixa d'Enginyers")
         expect(bank4.business).to be_falsey
         expect(bank4.documenttype).to eq("0")
-        expect(bank4.user).to eq("Correo electrónico")
-        expect(bank4.pass).to eq("Contraseña")
+        expect(bank4.user).to eq("Código de usuario")
+        expect(bank4.pass).to eq("Clave de acceso")
         expect(bank4.pass2).to eq("0")
         expect(bank4.userdesc).to eq("")
         expect(bank4.passdesc).to eq("")
         expect(bank4.pass2desc).to eq("")
         expect(bank4.usertype).to eq("text")
-        expect(bank4.passtype).to eq("text")
+        expect(bank4.passtype).to eq("tel")
         expect(bank4.pass2type).to eq("text")
-        expect(bank4.image).to eq("https://www.afterbanks.com/api/icons/n26.min.png")
-        expect(bank4.color).to eq("DBF8FC")
+        expect(bank4.image).to eq("https://www.afterbanks.com/api/icons/cajaingenieros.min.png")
+        expect(bank4.color).to eq("6FC1FF")
+
+        expect(bank5.class).to eq(Afterbanks::Bank)
+        expect(bank5.country_code).to eq("ES")
+        expect(bank5.service).to eq("caixa_emp")
+        expect(bank5.swift).to eq("CAIXESBB")
+        expect(bank5.fullname).to eq("Caixabank Empresas")
+        expect(bank5.business).to be_truthy
+        expect(bank5.documenttype).to eq("0")
+        expect(bank5.user).to eq("Identificación")
+        expect(bank5.pass).to eq("PIN1")
+        expect(bank5.pass2).to eq("0")
+        expect(bank5.userdesc).to eq("")
+        expect(bank5.passdesc).to eq("")
+        expect(bank5.pass2desc).to eq("")
+        expect(bank5.usertype).to eq("text")
+        expect(bank5.passtype).to eq("text")
+        expect(bank5.pass2type).to eq("text")
+        expect(bank5.image).to eq("https://www.afterbanks.com/api/icons/caixa.min.png")
+        expect(bank5.color).to eq("B2D4F4")
+
+        expect(bank6.class).to eq(Afterbanks::Bank)
+        expect(bank6.country_code).to eq("ES")
+        expect(bank6.service).to eq("N26")
+        expect(bank6.swift).to eq("NTSBDEB1")
+        expect(bank6.fullname).to eq("N26")
+        expect(bank6.business).to be_falsey
+        expect(bank6.documenttype).to eq("0")
+        expect(bank6.user).to eq("Correo electrónico")
+        expect(bank6.pass).to eq("Contraseña")
+        expect(bank6.pass2).to eq("0")
+        expect(bank6.userdesc).to eq("")
+        expect(bank6.passdesc).to eq("")
+        expect(bank6.pass2desc).to eq("")
+        expect(bank6.usertype).to eq("text")
+        expect(bank6.passtype).to eq("text")
+        expect(bank6.pass2type).to eq("text")
+        expect(bank6.image).to eq("https://www.afterbanks.com/api/icons/n26.min.png")
+        expect(bank6.color).to eq("DBF8FC")
       end
     end
   end
