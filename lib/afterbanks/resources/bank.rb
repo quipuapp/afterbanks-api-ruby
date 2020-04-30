@@ -67,8 +67,28 @@ module Afterbanks
     end
 
     def self.bank_name_for(bank_information:, services_number_by_bank_id:)
+      # Name changes:
+      # 1. Add Particulares if there are different personal/company endpoints
+      # 2. Add Empresas following the same reason
+      # 3. Rename Caja Ingenieros into Caixa d'Enginyers (most known name)
+      # 4. Rename Caixa Guisona into Caixa Guissona (fix typo)
+      # 5. Rename Caixa burriana into Caixa Burriana (fix typo)
+      # 6. Rename Bancho Pichincha into Banco Pichincha (fix typo)
+
       if bank_information['service'] == 'cajaingenieros'
         return "Caixa d'Enginyers"
+      end
+
+      if bank_information['service'] == 'caixaguissona'
+        return "Caixa Guissona"
+      end
+
+      if bank_information['service'] == 'caixaruralburriana'
+        return "Caixa Burriana"
+      end
+
+      if bank_information['service'] == 'pichincha'
+        return "Banco Pichincha"
       end
 
       fullname = bank_information['fullname']
