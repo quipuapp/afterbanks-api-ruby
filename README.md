@@ -33,6 +33,7 @@ You can set a `logger` as well.
 Changelog
 ---------
 
+* v.0.2.3 Better logging
 * v.0.2.2 Better naming (fix Caixa Guissona, Caixa Burriana and Banco Pichincha)
 * v.0.2.1 Better naming for banks (add Particulares for the proper ones, and use Caixa Enginyers)
 * v.0.2.0 Allow adding an (opt-in) random parameter to Afterbanks::Account.list to avoid caching

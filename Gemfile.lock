@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    afterbanks-api-ruby (0.2.2)
+    afterbanks-api-ruby (0.2.3)
       rest-client (~> 2.0.2)
 
 GEM
