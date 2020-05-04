@@ -50,38 +50,33 @@ module Afterbanks
     end
 
     def log_request(method:, url:, params: {}, debug_id: nil)
-      now = Time.now
-
-      log_message(message: "")
-      log_message(message: "=> #{method.upcase} #{url}")
-
-      log_message(message: "* Time: #{now}")
-      log_message(message: "* Timestamp: #{now.to_i}")
-      log_message(message: "* Debug ID: #{debug_id || 'none'}")
-
-      if params.any?
-        log_message(message: "* Params")
-        params.each do |key, value|
-          safe_value = if %w{servicekey user pass pass2}.include?(key.to_s)
-                         "<masked>"
-                       else
-                         value
-                       end
-
-          log_message(message: "#{key}: #{safe_value}")
-        end
-      else
-        log_message(message: "* No params")
-      end
-    end
-
-    def log_message(message: nil)
-      return if message.nil?
-
       logger = Afterbanks.configuration.logger
       return if logger.nil?
 
-      logger.info(message)
+      now = Time.now
+
+      safe_params = {}
+      params.each do |key, value|
+        safe_value = if %w{servicekey user pass pass2}.include?(key.to_s)
+                       "<masked>"
+                     else
+                       value
+                     end
+
+        safe_value = safe_value.to_s if safe_value.is_a?(Symbol)
+
+        safe_params[key] = safe_value
+      end
+
+      logger.info(
+        message: 'Afterbanks request',
+        method: method.upcase.to_s,
+        url: url,
+        time: now.to_s,
+        timestamp: now.to_i,
+        debug_id: debug_id || 'none',
+        params: safe_params
+      )
     end
 
     private
