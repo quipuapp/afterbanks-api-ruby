@@ -129,123 +129,115 @@ describe Afterbanks do
       )
     }
 
-    it "works" do
-      [
-        "",
-        "=> CUCA https://some.where/over/the/rainbow",
-        "* Time: 2020-03-24 18:47:00 +0100",
-        "* Timestamp: 1585072020",
-        "* Debug ID: abcd",
-        "* Params",
-        "servicekey: <masked>",
-        "a: z",
-        "user: <masked>",
-        "pass: <masked>",
-        "b: c",
-        "code: ruby",
-        "pass2: <masked>",
-        "d: e",
-      ].each do |unique_message|
-        expect(subject)
-          .to receive(:log_message).with(message: unique_message).once
+    context "with a nil Afterbanks.configuration.logger" do
+      before do
+        allow(Afterbanks).to receive_message_chain(:configuration, :logger) {
+          nil
+        }
       end
 
-      log_request
-    end
-
-    context "without params" do
-      let(:params) { {} }
-
-      it "works" do
-        [
-          "",
-          "=> CUCA https://some.where/over/the/rainbow",
-          "* Time: 2020-03-24 18:47:00 +0100",
-          "* Timestamp: 1585072020",
-          "* Debug ID: abcd",
-          "* No params"
-        ].each do |unique_message|
-          expect(subject)
-            .to receive(:log_message).with(message: unique_message).once
-        end
-
-        log_request
-      end
-    end
-
-    context "without debug_id" do
-      let(:debug_id) { nil }
-
-      it "works" do
-        [
-          "",
-          "=> CUCA https://some.where/over/the/rainbow",
-          "* Time: 2020-03-24 18:47:00 +0100",
-          "* Timestamp: 1585072020",
-          "* Debug ID: none",
-          "* Params",
-          "servicekey: <masked>",
-          "a: z",
-          "user: <masked>",
-          "pass: <masked>",
-          "b: c",
-          "code: ruby",
-          "pass2: <masked>",
-          "d: e",
-        ].each do |unique_message|
-          expect(subject)
-            .to receive(:log_message).with(message: unique_message).once
-        end
-
-        log_request
-      end
-    end
-
-    after do
-      Timecop.return
-    end
-  end
-
-  describe "#log_message" do
-    context "without a message" do
       it "does not call the logger" do
-        expect(Logger).not_to receive(:new)
+        expect_any_instance_of(Logger).not_to receive(:info)
 
-        subject.log_message(message: nil)
+        log_request
       end
     end
 
-    context "with a non-empty message" do
-      context "with a nil Afterbanks.configuration.logger" do
-        before do
-          allow(Afterbanks).to receive_message_chain(:configuration, :logger) {
-            nil
-          }
-        end
+    context "with a set-up logger" do
+      before do
+        logger = double(Logger)
+        allow(logger).to receive(:info) { }
 
-        it "does not call the logger" do
-          expect_any_instance_of(Logger).not_to receive(:info)
+        allow(Afterbanks).to receive_message_chain(:configuration, :logger) {
+          logger
+        }
+      end
 
-          subject.log_message(message: "cucamonga")
+      it "calls the logger with the proper info" do
+        expect(Afterbanks.configuration.logger)
+          .to receive(:info)
+          .with(
+            {
+              message: 'Afterbanks request',
+              method: 'CUCA',
+              url: 'https://some.where/over/the/rainbow',
+              time: "2020-03-24 18:47:00 +0100",
+              timestamp: 1585072020,
+              debug_id: 'abcd',
+              params: {
+                servicekey: '<masked>',
+                a: 'z',
+                user: '<masked>',
+                pass: '<masked>',
+                b: 'c',
+                code: 'ruby',
+                pass2: '<masked>',
+                d: 'e'
+              }
+            }
+          )
+          .once
+
+        log_request
+      end
+
+      context "without params" do
+        let(:params) { {} }
+
+        it "calls the logger with the proper info" do
+          expect(Afterbanks.configuration.logger)
+            .to receive(:info)
+            .with(
+              {
+                message: 'Afterbanks request',
+                method: 'CUCA',
+                url: 'https://some.where/over/the/rainbow',
+                time: "2020-03-24 18:47:00 +0100",
+                timestamp: 1585072020,
+                debug_id: 'abcd',
+                params: { }
+              }
+            )
+            .once
+
+          log_request
         end
       end
 
-      context "with a set-up logger" do
-        before do
-          logger = double(Logger)
-          allow(logger).to receive(:info) { }
+      context "without debug_id" do
+        let(:debug_id) { nil }
 
-          allow(Afterbanks).to receive_message_chain(:configuration, :logger) {
-            logger
-          }
-        end
-
-        it "calls the logger properly" do
+        it "calls the logger with the proper info" do
           expect(Afterbanks.configuration.logger)
-            .to receive(:info).with("cucamonga").once
+            .to receive(:info)
+            .with(
+              {
+                message: 'Afterbanks request',
+                method: 'CUCA',
+                url: 'https://some.where/over/the/rainbow',
+                time: "2020-03-24 18:47:00 +0100",
+                timestamp: 1585072020,
+                debug_id: 'none',
+                params: {
+                  servicekey: '<masked>',
+                  a: 'z',
+                  user: '<masked>',
+                  pass: '<masked>',
+                  b: 'c',
+                  code: 'ruby',
+                  pass2: '<masked>',
+                  d: 'e'
+                }
+              }
+            )
+            .once
 
-          subject.log_message(message: "cucamonga")
+          log_request
         end
+      end
+
+      after do
+        Timecop.return
       end
     end
   end
