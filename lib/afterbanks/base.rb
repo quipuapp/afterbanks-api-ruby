@@ -16,7 +16,8 @@ module Afterbanks
     def api_call(method:, path:, params: {})
       url = 'https://api.afterbanks.com' + path
 
-      request_params = { method: method, url: url }
+      # Timeout is set to 5min: some banks take a lot to respond (e.g. ING Direct)
+      request_params = { method: method, url: url, timeout: 60*5 }
 
       if method == :post
         request_params.merge!(payload: params)
