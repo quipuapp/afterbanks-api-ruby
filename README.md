@@ -33,6 +33,7 @@ You can set a `logger` as well.
 Changelog
 ---------
 
+* v.0.3.1 Small spec improvements
 * v.0.3.0 Set a higher timeout so it works properly with ING Direct
 * v.0.2.3 Better logging
 * v.0.2.2 Better naming (fix Caixa Guissona, Caixa Burriana and Banco Pichincha)
