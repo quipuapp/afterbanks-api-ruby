@@ -2,8 +2,12 @@ require "spec_helper"
 
 describe Afterbanks do
   describe "#configuration" do
-    it "returns a Configuration instance" do
-      expect(subject.configuration).to be_a(Afterbanks::Configuration)
+    it "returns a Configuration instance which has an API key and a logger" do
+      configuration = subject.configuration
+
+      expect(configuration).to be_a(Afterbanks::Configuration)
+      expect(configuration).to respond_to(:servicekey)
+      expect(configuration).to respond_to(:logger)
     end
   end
 
@@ -107,7 +111,7 @@ describe Afterbanks do
       Timecop.freeze(Time.new(2020, 3, 24, 18, 47))
     end
 
-    let(:method) { :cuca }
+    let(:method) { :get }
     let(:url) { "https://some.where/over/the/rainbow" }
     let(:params) {
       {
@@ -161,7 +165,7 @@ describe Afterbanks do
           .with(
             {
               message: 'Afterbanks request',
-              method: 'CUCA',
+              method: 'GET',
               url: 'https://some.where/over/the/rainbow',
               time: "2020-03-24 18:47:00 +0100",
               timestamp: 1585072020,
@@ -192,7 +196,7 @@ describe Afterbanks do
             .with(
               {
                 message: 'Afterbanks request',
-                method: 'CUCA',
+                method: 'GET',
                 url: 'https://some.where/over/the/rainbow',
                 time: "2020-03-24 18:47:00 +0100",
                 timestamp: 1585072020,
@@ -215,7 +219,7 @@ describe Afterbanks do
             .with(
               {
                 message: 'Afterbanks request',
-                method: 'CUCA',
+                method: 'GET',
                 url: 'https://some.where/over/the/rainbow',
                 time: "2020-03-24 18:47:00 +0100",
                 timestamp: 1585072020,
