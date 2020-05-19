@@ -11,7 +11,8 @@ module Afterbanks
                categoryId: :integer
 
     def self.list(service:, username:, password:, password2: nil,
-                  document_type: nil, products:, startdate:,
+                  document_type: nil, account_id: nil,
+                  products:, startdate:,
                   session_id: nil, otp: nil, counter_id: nil)
 
       params = {
@@ -25,6 +26,8 @@ module Afterbanks
 
       params.merge!(pass2: password2) unless password2.nil?
       params.merge!(documentType: document_type) unless document_type.nil?
+      params.merge!(account_id: account_id) unless account_id.nil?
+
       params.merge!(session_id: session_id) unless session_id.nil?
       params.merge!(OTP: otp) unless otp.nil?
       params.merge!(counterId: counter_id) unless counter_id.nil?
