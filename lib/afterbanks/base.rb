@@ -111,7 +111,7 @@ module Afterbanks
 
         error_info.merge!(additional_info: additional_info)
 
-        if additional_info['session_id']
+        if additional_info.is_a?(Hash) && additional_info['session_id']
           raise TwoStepAuthenticationError.new(error_info)
         else
           raise AccountIdNeededError.new(error_info)

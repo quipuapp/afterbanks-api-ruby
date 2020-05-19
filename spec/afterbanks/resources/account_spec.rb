@@ -382,11 +382,17 @@ describe Afterbanks::Account do
               an_instance_of(Afterbanks::AccountIdNeededError)
                 .and having_attributes(
                   code: 50,
-                  message: "No se han encontrado productos",
+                  message: "Escoge una cuenta",
                   debug_id: 'debugerror50accid',
-                  additional_info: {
-                    "counterId" => 3
-                  }
+                  additional_info: [
+                    {
+                      "account_id" => 0,
+                      "description" => "Account one"
+                    }, {
+                      "account_id" => 1,
+                      "description" => "Account two"
+                    }
+                  ]
                 )
             )
           end
