@@ -1,7 +1,13 @@
 {
-  "message": "No se han encontrado productos",
+  "message": "Escoge una cuenta",
   "code": 50,
-  "additional_info": {
-    "counterId": 3
-  }
+  "additional_info": [
+    {
+      "account_id": 0,
+      "description": "Account one"
+    }, {
+      "account_id": 1,
+      "description": "Account two"
+    }
+  ]
 }
