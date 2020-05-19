@@ -149,6 +149,31 @@ describe Afterbanks::Account do
         include_examples "proper request and data parsing"
       end
 
+      context "for a case with account ID" do
+        let(:body) {
+          {
+            "servicekey" => 'a_servicekey_which_works',
+            "service" => service,
+            "user" => username,
+            "pass" => password,
+            "pass2" => "cucamonga",
+            "account_id" => 2,
+            "products" => 'GLOBAL'
+          }
+        }
+        let(:api_call) {
+          Afterbanks::Account.list(
+            service: service,
+            username: username,
+            password: password,
+            password2: 'cucamonga',
+            account_id: 2
+          )
+        }
+
+        include_examples "proper request and data parsing"
+      end
+
       context "for a two step authentication case" do
         let(:body) {
           {
