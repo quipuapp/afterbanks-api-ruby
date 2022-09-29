@@ -93,28 +93,28 @@ module Afterbanks
 
       case code
       when 1
-        raise GenericError.new(error_info)
+        raise GenericError.new(**error_info)
       when 2
-        raise ServiceUnavailableTemporarilyError.new(error_info)
+        raise ServiceUnavailableTemporarilyError.new(**error_info)
       when 3
-        raise ConnectionDataError.new(error_info)
+        raise ConnectionDataError.new(**error_info)
       when 4
-        raise AccountIdDoesNotExistError.new(error_info)
+        raise AccountIdDoesNotExistError.new(**error_info)
       when 5
-        raise CutConnectionError.new(error_info)
+        raise CutConnectionError.new(**error_info)
       when 6
-        raise HumanActionNeededError.new(error_info)
+        raise HumanActionNeededError.new(**error_info)
       when 50
         unless additional_info
-          raise MissingParameterError.new(error_info)
+          raise MissingParameterError.new(**error_info)
         end
 
         error_info.merge!(additional_info: additional_info)
 
         if additional_info.is_a?(Hash) && additional_info['session_id']
-          raise TwoStepAuthenticationError.new(error_info)
+          raise TwoStepAuthenticationError.new(**error_info)
         else
-          raise AccountIdNeededError.new(error_info)
+          raise AccountIdNeededError.new(**error_info)
         end
       end
 
