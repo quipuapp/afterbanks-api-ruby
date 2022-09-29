@@ -4,7 +4,7 @@ executors:
   gem-executor:
     working_directory: ~/tmp/gem
     docker:
-      - image: circleci/ruby:2.4.1
+      - image: circleci/ruby:2.7.5
     environment:
       TZ: "Europe/Madrid"
 
@@ -16,7 +16,7 @@ jobs:
 
       - run:
           name: Update bundler
-          command: gem install bundler -v 1.17.3
+          command: gem install bundler -v 2.2.20
 
       - restore_cache:
           keys:
