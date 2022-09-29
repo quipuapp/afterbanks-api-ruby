@@ -51,8 +51,7 @@ module Afterbanks
           transactions_information_for(
             service: service,
             response: response,
-            products: products,
-            check_products_presence: check_products_presence
+            products: products
           ),
           self
         ),
@@ -75,7 +74,7 @@ module Afterbanks
       )
     end
 
-    def self.transactions_information_for(response:, service:, products:, check_products_presence:)
+    def self.transactions_information_for(response:, service:, products:)
       transactions_information = []
       products_array = products.split(",")
 
