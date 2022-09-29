@@ -66,4 +66,12 @@ module Afterbanks
       50
     end
   end
+
+  class MissingProductError < Error
+    def code
+      # This is not provided by Afterbanks itself, but an invented unique ID
+      # without overlap from other error codes
+      -1
+    end
+  end
 end

@@ -26,17 +26,20 @@ describe Afterbanks::Transaction do
         startdate: startdate
       )
     }
-
-    context "when returning data" do
-      shared_examples "proper request and data parsing" do
-        before do
-          stub_request(:post, "https://api.afterbanks.com/V3/").
+    let(:stub_transactions_request) {
+      stub_request(:post, "https://api.afterbanks.com/V3/").
             with(body: body).
             to_return(
               status: 200,
               body: response_json(resource: 'transaction', action: 'list'),
               headers: { debug_id: 'translist1234' }
             )
+    }
+
+    context "when returning data" do
+      shared_examples "proper request and data parsing" do
+        before do
+          stub_transactions_request
         end
 
         it "does the proper request and returns the proper Afterbanks::Response with the debugId and the proper Afterbanks::Transaction instances" do
@@ -212,6 +215,42 @@ describe Afterbanks::Transaction do
         }
 
         include_examples "proper request and data parsing"
+      end
+
+      context "for a missing product case" do
+        let(:products) { 'ES2720809591124344566256,SOMETHING_INVENTED' }
+
+        context "when not passing the check_products_presence flag" do
+          include_examples "proper request and data parsing"
+        end
+
+        context "when passing the check_products_presence flag" do
+          before do
+            stub_transactions_request
+          end
+
+          let(:api_call) {
+            Afterbanks::Transaction.list(
+              service: service,
+              username: username,
+              password: password,
+              products: products,
+              check_products_presence: true,
+              startdate: startdate,
+            )
+          }
+
+          it "raises a MissingProductError" do
+            expect { api_call }.to raise_error(
+              an_instance_of(Afterbanks::MissingProductError)
+                .and having_attributes(
+                  code: -1,
+                  message: "Producto no encontrado",
+                  debug_id: 'translist1234'
+                )
+            )
+          end
+        end
       end
     end
 
