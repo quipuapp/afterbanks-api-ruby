@@ -3,15 +3,15 @@ require "spec_helper"
 describe Afterbanks::User do
   describe "#get" do
     before do
-      stub_request(:post, "https://api.afterbanks.com/me/").
-        with(
+      stub_request(:post, "https://api.afterbanks.com/me/")
+        .with(
           body: {
             servicekey: 'a_servicekey_which_works'
           }
-        ).
-        to_return(
-          status: 200,
-          body: response_json(resource: 'user', action: 'get'),
+        )
+        .to_return(
+          status:  200,
+          body:    response_json(resource: 'user', action: 'get'),
           headers: { debug_id: 'usrget1234' }
         )
     end
@@ -41,11 +41,11 @@ describe Afterbanks::User do
     let(:detail) { nil }
     let(:original_user) do
       Afterbanks::User.new(
-        limit: limit,
-        counter: counter,
+        limit:           limit,
+        counter:         counter,
         remaining_calls: remaining_calls,
-        date_renewal: date_renewal,
-        detail: detail
+        date_renewal:    date_renewal,
+        detail:          detail
       )
     end
 
