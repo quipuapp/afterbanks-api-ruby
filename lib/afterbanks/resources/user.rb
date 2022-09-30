@@ -21,6 +21,6 @@ module Afterbanks
           debug_id: debug_id
         )
       end
-  end
+    end
   end
 end

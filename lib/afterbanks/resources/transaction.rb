@@ -13,7 +13,7 @@ module Afterbanks
     class << self
       def list(service:, username:, password:, password2: nil,
                document_type: nil, account_id: nil,
-               products:, startdate:,
+               products:, check_products_presence: false, startdate:,
                session_id: nil, otp: nil, counter_id: nil)
 
         params = {
@@ -39,6 +39,14 @@ module Afterbanks
           params: params
         )
 
+        if check_products_presence
+          ensure_no_product_is_missing(
+            response: response,
+            debug_id: debug_id,
+            products: products
+          )
+        end
+
         Response.new(
           result:   Collection.new(
             transactions_information_for(
@@ -53,6 +61,19 @@ module Afterbanks
       end
 
     private
+
+      def ensure_no_product_is_missing(response:, debug_id:, products:)
+        products_array = products.split(",")
+        found_products_array = response.map { |account_information| account_information['product'] }
+
+        missing_products_array = products_array - found_products_array
+        return unless missing_products_array.any?
+
+        raise MissingProductError.new(
+          message:  'Producto no encontrado',
+          debug_id: debug_id
+        )
+      end
 
       def transactions_information_for(response:, service:, products:)
         transactions_information = []
