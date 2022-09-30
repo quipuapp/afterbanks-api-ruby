@@ -3,10 +3,10 @@ require "spec_helper"
 describe Afterbanks::Bank do
   describe "#list" do
     before do
-      stub_request(:get, "https://api.afterbanks.com/forms/").
-        to_return(
-          status: 200,
-          body: response_json(resource: 'bank', action: 'list'),
+      stub_request(:get, "https://api.afterbanks.com/forms/")
+        .to_return(
+          status:  200,
+          body:    response_json(resource: 'bank', action: 'list'),
           headers: { debug_id: 'banklist1234' }
         )
     end
@@ -405,22 +405,22 @@ describe Afterbanks::Bank do
     let(:original_bank) do
       Afterbanks::Bank.new(
         country_code: country_code,
-        service: service,
-        swift: swift,
-        fullname: fullname,
-        business: business,
+        service:      service,
+        swift:        swift,
+        fullname:     fullname,
+        business:     business,
         documenttype: documenttype,
-        user: user,
-        pass: pass,
-        pass2: pass2,
-        userdesc: userdesc,
-        passdesc: passdesc,
-        pass2desc: pass2desc,
-        usertype: usertype,
-        passtype: passtype,
-        pass2type: pass2type,
-        image: image,
-        color: color
+        user:         user,
+        pass:         pass,
+        pass2:        pass2,
+        userdesc:     userdesc,
+        passdesc:     passdesc,
+        pass2desc:    pass2desc,
+        usertype:     usertype,
+        passtype:     passtype,
+        pass2type:    pass2type,
+        image:        image,
+        color:        color
       )
     end
 

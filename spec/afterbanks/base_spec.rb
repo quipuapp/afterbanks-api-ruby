@@ -28,10 +28,10 @@ describe Afterbanks do
       let(:method) { :get }
 
       before do
-        stub_request(:get, "https://api.afterbanks.com/V3/some/endpoint?a=b&c=d&e=f").
-          to_return(
-            status: 200,
-            body: "{}",
+        stub_request(:get, "https://api.afterbanks.com/V3/some/endpoint?a=b&c=d&e=f")
+          .to_return(
+            status:  200,
+            body:    "{}",
             headers: { debug_id: 'abcd' }
           )
       end
@@ -39,24 +39,24 @@ describe Afterbanks do
       it "works" do
         expect(subject)
           .to receive(:log_request)
-          .with(
-            method: :get,
-            url: "https://api.afterbanks.com/V3/some/endpoint",
-            params: { a: :b, c: :d, e: :f },
-            debug_id: 'abcd'
-          )
+                .with(
+                  method:   :get,
+                  url:      "https://api.afterbanks.com/V3/some/endpoint",
+                  params:   { a: :b, c: :d, e: :f },
+                  debug_id: 'abcd'
+                )
 
         expect(RestClient::Request)
           .to receive(:execute)
-          .with(
-            method: :get,
-            url: "https://api.afterbanks.com/V3/some/endpoint",
-            headers: {
-              params: { a: :b, c: :d, e: :f }
-            },
-            timeout: 300
-          )
-          .and_call_original
+                .with(
+                  method:  :get,
+                  url:     "https://api.afterbanks.com/V3/some/endpoint",
+                  headers: {
+                    params: { a: :b, c: :d, e: :f }
+                  },
+                  timeout: 300
+                )
+                .and_call_original
 
         api_call
       end
@@ -69,14 +69,14 @@ describe Afterbanks do
         stub_request(:post, "https://api.afterbanks.com/V3/some/endpoint")
           .with(
             body: {
-              "a"=>"b",
-              "c"=>"d",
-              "e"=>"f"
+              "a" => "b",
+              "c" => "d",
+              "e" => "f"
             }
           )
           .to_return(
-            status: 200,
-            body: "{}",
+            status:  200,
+            body:    "{}",
             headers: { debug_id: 'abcd' }
           )
       end
@@ -84,22 +84,22 @@ describe Afterbanks do
       it "works" do
         expect(subject)
           .to receive(:log_request)
-          .with(
-            method: :post,
-            url: "https://api.afterbanks.com/V3/some/endpoint",
-            params: { a: :b, c: :d, e: :f },
-            debug_id: 'abcd'
-          )
+                .with(
+                  method:   :post,
+                  url:      "https://api.afterbanks.com/V3/some/endpoint",
+                  params:   { a: :b, c: :d, e: :f },
+                  debug_id: 'abcd'
+                )
 
         expect(RestClient::Request)
           .to receive(:execute)
-          .with(
-            method: :post,
-            url: "https://api.afterbanks.com/V3/some/endpoint",
-            payload: {:a=>:b, :c=>:d, :e=>:f},
-            timeout: 300
-          )
-          .and_call_original
+                .with(
+                  method:  :post,
+                  url:     "https://api.afterbanks.com/V3/some/endpoint",
+                  payload: { :a => :b, :c => :d, :e => :f },
+                  timeout: 300
+                )
+                .and_call_original
 
         api_call
       end
@@ -116,21 +116,21 @@ describe Afterbanks do
     let(:params) {
       {
         servicekey: 'secret_stuff',
-        a: :z,
-        user: "the_super_secret_stuff",
-        pass: 'mipass',
-        b: :c,
-        code: 'ruby',
-        pass2: 'misecondpass',
-        d: :e
+        a:          :z,
+        user:       "the_super_secret_stuff",
+        pass:       'mipass',
+        b:          :c,
+        code:       'ruby',
+        pass2:      'misecondpass',
+        d:          :e
       }
     }
     let(:debug_id) { 'abcd' }
     let(:log_request) {
       subject.log_request(
-        method: method,
-        url: url,
-        params: params,
+        method:   method,
+        url:      url,
+        params:   params,
         debug_id: debug_id
       )
     }
@@ -152,7 +152,7 @@ describe Afterbanks do
     context "with a set-up logger" do
       before do
         logger = double(Logger)
-        allow(logger).to receive(:info) { }
+        allow(logger).to receive(:info) { nil }
 
         allow(Afterbanks).to receive_message_chain(:configuration, :logger) {
           logger
@@ -162,27 +162,27 @@ describe Afterbanks do
       it "calls the logger with the proper info" do
         expect(Afterbanks.configuration.logger)
           .to receive(:info)
-          .with(
-            {
-              message: 'Afterbanks request',
-              method: 'GET',
-              url: 'https://some.where/over/the/rainbow',
-              time: "2020-03-24 18:47:00 +0100",
-              timestamp: 1585072020,
-              debug_id: 'abcd',
-              params: {
-                servicekey: '<masked>',
-                a: 'z',
-                user: '<masked>',
-                pass: '<masked>',
-                b: 'c',
-                code: 'ruby',
-                pass2: '<masked>',
-                d: 'e'
-              }
-            }
-          )
-          .once
+                .with(
+                  {
+                    message:   'Afterbanks request',
+                    method:    'GET',
+                    url:       'https://some.where/over/the/rainbow',
+                    time:      "2020-03-24 18:47:00 +0100",
+                    timestamp: 1585072020,
+                    debug_id:  'abcd',
+                    params:    {
+                      servicekey: '<masked>',
+                      a:          'z',
+                      user:       '<masked>',
+                      pass:       '<masked>',
+                      b:          'c',
+                      code:       'ruby',
+                      pass2:      '<masked>',
+                      d:          'e'
+                    }
+                  }
+                )
+                .once
 
         log_request
       end
@@ -193,18 +193,18 @@ describe Afterbanks do
         it "calls the logger with the proper info" do
           expect(Afterbanks.configuration.logger)
             .to receive(:info)
-            .with(
-              {
-                message: 'Afterbanks request',
-                method: 'GET',
-                url: 'https://some.where/over/the/rainbow',
-                time: "2020-03-24 18:47:00 +0100",
-                timestamp: 1585072020,
-                debug_id: 'abcd',
-                params: { }
-              }
-            )
-            .once
+                  .with(
+                    {
+                      message:   'Afterbanks request',
+                      method:    'GET',
+                      url:       'https://some.where/over/the/rainbow',
+                      time:      "2020-03-24 18:47:00 +0100",
+                      timestamp: 1585072020,
+                      debug_id:  'abcd',
+                      params:    {}
+                    }
+                  )
+                  .once
 
           log_request
         end
@@ -216,27 +216,27 @@ describe Afterbanks do
         it "calls the logger with the proper info" do
           expect(Afterbanks.configuration.logger)
             .to receive(:info)
-            .with(
-              {
-                message: 'Afterbanks request',
-                method: 'GET',
-                url: 'https://some.where/over/the/rainbow',
-                time: "2020-03-24 18:47:00 +0100",
-                timestamp: 1585072020,
-                debug_id: 'none',
-                params: {
-                  servicekey: '<masked>',
-                  a: 'z',
-                  user: '<masked>',
-                  pass: '<masked>',
-                  b: 'c',
-                  code: 'ruby',
-                  pass2: '<masked>',
-                  d: 'e'
-                }
-              }
-            )
-            .once
+                  .with(
+                    {
+                      message:   'Afterbanks request',
+                      method:    'GET',
+                      url:       'https://some.where/over/the/rainbow',
+                      time:      "2020-03-24 18:47:00 +0100",
+                      timestamp: 1585072020,
+                      debug_id:  'none',
+                      params:    {
+                        servicekey: '<masked>',
+                        a:          'z',
+                        user:       '<masked>',
+                        pass:       '<masked>',
+                        b:          'c',
+                        code:       'ruby',
+                        pass2:      '<masked>',
+                        d:          'e'
+                      }
+                    }
+                  )
+                  .once
 
           log_request
         end
