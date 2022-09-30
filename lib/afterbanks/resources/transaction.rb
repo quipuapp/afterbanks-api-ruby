@@ -46,6 +46,7 @@ module Afterbanks
             products: products
           )
         end
+
         Response.new(
           result:   Collection.new(
             transactions_information_for(
