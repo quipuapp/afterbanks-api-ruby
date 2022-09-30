@@ -8,15 +8,15 @@ describe Afterbanks::Account do
     let(:body) {
       {
         "servicekey" => 'a_servicekey_which_works',
-        "service" => service,
-        "user" => username,
-        "pass" => password,
-        "products" => 'GLOBAL'
+        "service"    => service,
+        "user"       => username,
+        "pass"       => password,
+        "products"   => 'GLOBAL'
       }
     }
     let(:api_call) {
       Afterbanks::Account.list(
-        service: service,
+        service:  service,
         username: username,
         password: password
       )
@@ -25,11 +25,11 @@ describe Afterbanks::Account do
     context "when returning data" do
       shared_examples "proper request and data parsing" do
         before do
-          stub_request(:post, "https://api.afterbanks.com/V3/").
-            with(body: body).
-            to_return(
-              status: 200,
-              body: response_json(resource: 'account', action: 'list'),
+          stub_request(:post, "https://api.afterbanks.com/V3/")
+            .with(body: body)
+            .to_return(
+              status:  200,
+              body:    response_json(resource: 'account', action: 'list'),
               headers: { debug_id: 'acclist1234' }
             )
         end
@@ -105,18 +105,18 @@ describe Afterbanks::Account do
         let(:body) {
           {
             "servicekey" => 'a_servicekey_which_works',
-            "service" => service,
-            "user" => username,
-            "pass" => password,
-            "pass2" => "cucamonga",
-            "products" => 'GLOBAL'
+            "service"    => service,
+            "user"       => username,
+            "pass"       => password,
+            "pass2"      => "cucamonga",
+            "products"   => 'GLOBAL'
           }
         }
         let(:api_call) {
           Afterbanks::Account.list(
-            service: service,
-            username: username,
-            password: password,
+            service:   service,
+            username:  username,
+            password:  password,
             password2: 'cucamonga'
           )
         }
@@ -127,21 +127,21 @@ describe Afterbanks::Account do
       context "for a case with a document type" do
         let(:body) {
           {
-            "servicekey" => 'a_servicekey_which_works',
-            "service" => service,
-            "user" => username,
-            "pass" => password,
-            "pass2" => "cucamonga",
+            "servicekey"   => 'a_servicekey_which_works',
+            "service"      => service,
+            "user"         => username,
+            "pass"         => password,
+            "pass2"        => "cucamonga",
             "documentType" => "1",
-            "products" => 'GLOBAL'
+            "products"     => 'GLOBAL'
           }
         }
         let(:api_call) {
           Afterbanks::Account.list(
-            service: service,
-            username: username,
-            password: password,
-            password2: 'cucamonga',
+            service:       service,
+            username:      username,
+            password:      password,
+            password2:     'cucamonga',
             document_type: 1
           )
         }
@@ -153,20 +153,20 @@ describe Afterbanks::Account do
         let(:body) {
           {
             "servicekey" => 'a_servicekey_which_works',
-            "service" => service,
-            "user" => username,
-            "pass" => password,
-            "pass2" => "cucamonga",
+            "service"    => service,
+            "user"       => username,
+            "pass"       => password,
+            "pass2"      => "cucamonga",
             "account_id" => 2,
-            "products" => 'GLOBAL'
+            "products"   => 'GLOBAL'
           }
         }
         let(:api_call) {
           Afterbanks::Account.list(
-            service: service,
-            username: username,
-            password: password,
-            password2: 'cucamonga',
+            service:    service,
+            username:   username,
+            password:   password,
+            password2:  'cucamonga',
             account_id: 2
           )
         }
@@ -178,22 +178,22 @@ describe Afterbanks::Account do
         let(:body) {
           {
             "servicekey" => 'a_servicekey_which_works',
-            "service" => service,
-            "user" => username,
-            "pass" => password,
-            "products" => 'GLOBAL',
+            "service"    => service,
+            "user"       => username,
+            "pass"       => password,
+            "products"   => 'GLOBAL',
             "session_id" => 'abcd1234',
-            "OTP" => '1745',
-            "counterId" => "4"
+            "OTP"        => '1745',
+            "counterId"  => "4"
           }
         }
         let(:api_call) {
           Afterbanks::Account.list(
-            service: service,
-            username: username,
-            password: password,
+            service:    service,
+            username:   username,
+            password:   password,
             session_id: 'abcd1234',
-            otp: '1745',
+            otp:        '1745',
             counter_id: 4
           )
         }
@@ -209,19 +209,19 @@ describe Afterbanks::Account do
         let(:body) {
           {
             "servicekey" => 'a_servicekey_which_works',
-            "service" => service,
-            "user" => username,
-            "pass" => password,
-            "products" => 'GLOBAL',
+            "service"    => service,
+            "user"       => username,
+            "pass"       => password,
+            "products"   => 'GLOBAL',
             "randomizer" => '1575390120'
           }
         }
 
         let(:api_call) {
           Afterbanks::Account.list(
-            service: service,
-            username: username,
-            password: password,
+            service:       service,
+            username:      username,
+            password:      password,
             avoid_caching: true
           )
         }
@@ -233,11 +233,11 @@ describe Afterbanks::Account do
     context "when returning an error" do
       context "which is generic (code 1)" do
         before do
-          stub_request(:post, "https://api.afterbanks.com/V3/").
-            with(body: body).
-            to_return(
-              status: 400,
-              body: response_json(resource: 'common', action: 'error_1'),
+          stub_request(:post, "https://api.afterbanks.com/V3/")
+            .with(body: body)
+            .to_return(
+              status:  400,
+              body:    response_json(resource: 'common', action: 'error_1'),
               headers: { debug_id: 'debugerror1' }
             )
         end
@@ -246,7 +246,7 @@ describe Afterbanks::Account do
           expect { api_call }.to raise_error(
             an_instance_of(Afterbanks::GenericError)
               .and having_attributes(
-                code: 1,
+                code:    1,
                 message: "Error genérico"
               )
           )
@@ -255,11 +255,11 @@ describe Afterbanks::Account do
 
       context "which is service unavailable temporarily (code 2)" do
         before do
-          stub_request(:post, "https://api.afterbanks.com/V3/").
-            with(body: body).
-            to_return(
-              status: 200,
-              body: response_json(resource: 'common', action: 'error_2'),
+          stub_request(:post, "https://api.afterbanks.com/V3/")
+            .with(body: body)
+            .to_return(
+              status:  200,
+              body:    response_json(resource: 'common', action: 'error_2'),
               headers: { debug_id: 'debugerror2' }
             )
         end
@@ -268,7 +268,7 @@ describe Afterbanks::Account do
           expect { api_call }.to raise_error(
             an_instance_of(Afterbanks::ServiceUnavailableTemporarilyError)
               .and having_attributes(
-                code: 2,
+                code:    2,
                 message: "Servicio no disponible ahora mismo"
               )
           )
@@ -277,11 +277,11 @@ describe Afterbanks::Account do
 
       context "which is connection data (code 3)" do
         before do
-          stub_request(:post, "https://api.afterbanks.com/V3/").
-            with(body: body).
-            to_return(
-              status: 417,
-              body: response_json(resource: 'common', action: 'error_3'),
+          stub_request(:post, "https://api.afterbanks.com/V3/")
+            .with(body: body)
+            .to_return(
+              status:  417,
+              body:    response_json(resource: 'common', action: 'error_3'),
               headers: { debug_id: 'debugerror3' }
             )
         end
@@ -290,7 +290,7 @@ describe Afterbanks::Account do
           expect { api_call }.to raise_error(
             an_instance_of(Afterbanks::ConnectionDataError)
               .and having_attributes(
-                code: 3,
+                code:    3,
                 message: "Datos de la conexión inválidos"
               )
           )
@@ -299,11 +299,11 @@ describe Afterbanks::Account do
 
       context "which is account ID does not exist (code 4)" do
         before do
-          stub_request(:post, "https://api.afterbanks.com/V3/").
-            with(body: body).
-            to_return(
-              status: 200,
-              body: response_json(resource: 'common', action: 'error_4'),
+          stub_request(:post, "https://api.afterbanks.com/V3/")
+            .with(body: body)
+            .to_return(
+              status:  200,
+              body:    response_json(resource: 'common', action: 'error_4'),
               headers: { debug_id: 'debugerror4' }
             )
         end
@@ -312,7 +312,7 @@ describe Afterbanks::Account do
           expect { api_call }.to raise_error(
             an_instance_of(Afterbanks::AccountIdDoesNotExistError)
               .and having_attributes(
-                code: 4,
+                code:    4,
                 message: "AccountID no existe"
               )
           )
@@ -321,11 +321,11 @@ describe Afterbanks::Account do
 
       context "which is cut connection (code 5)" do
         before do
-          stub_request(:post, "https://api.afterbanks.com/V3/").
-            with(body: body).
-            to_return(
-              status: 200,
-              body: response_json(resource: 'common', action: 'error_5'),
+          stub_request(:post, "https://api.afterbanks.com/V3/")
+            .with(body: body)
+            .to_return(
+              status:  200,
+              body:    response_json(resource: 'common', action: 'error_5'),
               headers: { debug_id: 'debugerror5' }
             )
         end
@@ -334,7 +334,7 @@ describe Afterbanks::Account do
           expect { api_call }.to raise_error(
             an_instance_of(Afterbanks::CutConnectionError)
               .and having_attributes(
-                code: 5,
+                code:    5,
                 message: "Conexión cortada"
               )
           )
@@ -343,11 +343,11 @@ describe Afterbanks::Account do
 
       context "which is human action needed (code 6)" do
         before do
-          stub_request(:post, "https://api.afterbanks.com/V3/").
-            with(body: body).
-            to_return(
-              status: 200,
-              body: response_json(resource: 'common', action: 'error_6'),
+          stub_request(:post, "https://api.afterbanks.com/V3/")
+            .with(body: body)
+            .to_return(
+              status:  200,
+              body:    response_json(resource: 'common', action: 'error_6'),
               headers: { debug_id: 'debugerror6' }
             )
         end
@@ -356,7 +356,7 @@ describe Afterbanks::Account do
           expect { api_call }.to raise_error(
             an_instance_of(Afterbanks::HumanActionNeededError)
               .and having_attributes(
-                code: 6,
+                code:    6,
                 message: "El usuario debe realizar una acción en el banco"
               )
           )
@@ -366,11 +366,11 @@ describe Afterbanks::Account do
       context "which needs for another parameter (code 50)" do
         context "which is two step authentication" do
           before do
-            stub_request(:post, "https://api.afterbanks.com/V3/").
-              with(body: body).
-              to_return(
-                status: 200,
-                body: response_json(resource: 'common', action: 'error_50_two_way_authentication'),
+            stub_request(:post, "https://api.afterbanks.com/V3/")
+              .with(body: body)
+              .to_return(
+                status:  200,
+                body:    response_json(resource: 'common', action: 'error_50_two_way_authentication'),
                 headers: { debug_id: 'debugerror50tsa' }
               )
           end
@@ -379,12 +379,12 @@ describe Afterbanks::Account do
             expect { api_call }.to raise_error(
               an_instance_of(Afterbanks::TwoStepAuthenticationError)
                 .and having_attributes(
-                  code: 50,
-                  message: "A bank te ha enviado un código",
-                  debug_id: 'debugerror50tsa',
+                  code:            50,
+                  message:         "A bank te ha enviado un código",
+                  debug_id:        'debugerror50tsa',
                   additional_info: {
                     "session_id" => "12345678",
-                    "counterId" => 4
+                    "counterId"  => 4
                   }
                 )
             )
@@ -393,11 +393,11 @@ describe Afterbanks::Account do
 
         context "which is the account ID" do
           before do
-            stub_request(:post, "https://api.afterbanks.com/V3/").
-              with(body: body).
-              to_return(
-                status: 200,
-                body: response_json(resource: 'common', action: 'error_50_account_id'),
+            stub_request(:post, "https://api.afterbanks.com/V3/")
+              .with(body: body)
+              .to_return(
+                status:  200,
+                body:    response_json(resource: 'common', action: 'error_50_account_id'),
                 headers: { debug_id: 'debugerror50accid' }
               )
           end
@@ -406,15 +406,15 @@ describe Afterbanks::Account do
             expect { api_call }.to raise_error(
               an_instance_of(Afterbanks::AccountIdNeededError)
                 .and having_attributes(
-                  code: 50,
-                  message: "Escoge una cuenta",
-                  debug_id: 'debugerror50accid',
+                  code:            50,
+                  message:         "Escoge una cuenta",
+                  debug_id:        'debugerror50accid',
                   additional_info: [
                     {
-                      "account_id" => 0,
+                      "account_id"  => 0,
                       "description" => "Account one"
                     }, {
-                      "account_id" => 1,
+                      "account_id"  => 1,
                       "description" => "Account two"
                     }
                   ]
@@ -425,11 +425,11 @@ describe Afterbanks::Account do
 
         context "which is another one" do
           before do
-            stub_request(:post, "https://api.afterbanks.com/V3/").
-              with(body: body).
-              to_return(
-                status: 200,
-                body: response_json(resource: 'common', action: 'error_50_missing_parameter'),
+            stub_request(:post, "https://api.afterbanks.com/V3/")
+              .with(body: body)
+              .to_return(
+                status:  200,
+                body:    response_json(resource: 'common', action: 'error_50_missing_parameter'),
                 headers: { debug_id: 'debugerror50missparam' }
               )
           end
@@ -438,8 +438,8 @@ describe Afterbanks::Account do
             expect { api_call }.to raise_error(
               an_instance_of(Afterbanks::MissingParameterError)
                 .and having_attributes(
-                  code: 50,
-                  message: "Falta el servicekey",
+                  code:     50,
+                  message:  "Falta el servicekey",
                   debug_id: 'debugerror50missparam'
                 )
             )
@@ -461,33 +461,33 @@ describe Afterbanks::Account do
     let(:holders) {
       [
         {
-          "role": "Admin",
-          "name": "Mary",
-          "id": 1
+          role: "Admin",
+          name: "Mary",
+          id:   1
         },
         {
-          "role": "Admin",
-          "name": "Liz",
-          "id": 2
+          role: "Admin",
+          name: "Liz",
+          id:   2
         },
         {
-          "role": "Supervisor",
-          "name": "John",
-          "id": 3
+          role: "Supervisor",
+          name: "John",
+          id:   3
         }
       ]
     }
     let(:original_account) do
       Afterbanks::Account.new(
-        service: service,
-        product: product,
-        type: type,
-        balance: balance,
-        currency: currency,
+        service:     service,
+        product:     product,
+        type:        type,
+        balance:     balance,
+        currency:    currency,
         description: description,
-        iban: iban,
-        is_owner: is_owner,
-        holders: holders
+        iban:        iban,
+        is_owner:    is_owner,
+        holders:     holders
       )
     end
 

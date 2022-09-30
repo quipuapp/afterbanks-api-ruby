@@ -3,8 +3,6 @@ require 'json'
 
 module Afterbanks
   class << self
-    attr_accessor :configuration
-
     def configuration
       @configuration ||= Configuration.new
     end
@@ -17,7 +15,7 @@ module Afterbanks
       url = 'https://api.afterbanks.com' + path
 
       # Timeout is set to 5min: some banks take a lot to respond (e.g. ING Direct)
-      request_params = { method: method, url: url, timeout: 60*5 }
+      request_params = { method: method, url: url, timeout: 60 * 5 }
 
       if method == :post
         request_params.merge!(payload: params)
@@ -34,9 +32,9 @@ module Afterbanks
       debug_id = response.headers[:debug_id]
 
       log_request(
-        method: method,
-        url: url,
-        params: params,
+        method:   method,
+        url:      url,
+        params:   params,
         debug_id: debug_id
       )
 
@@ -44,7 +42,7 @@ module Afterbanks
 
       treat_errors_if_any(
         response_body: response_body,
-        debug_id: debug_id
+        debug_id:      debug_id
       )
 
       [response_body, debug_id]
@@ -70,13 +68,13 @@ module Afterbanks
       end
 
       logger.info(
-        message: 'Afterbanks request',
-        method: method.upcase.to_s,
-        url: url,
-        time: now.to_s,
+        message:   'Afterbanks request',
+        method:    method.upcase.to_s,
+        url:       url,
+        time:      now.to_s,
         timestamp: now.to_i,
-        debug_id: debug_id || 'none',
-        params: safe_params
+        debug_id:  debug_id || 'none',
+        params:    safe_params
       )
     end
 

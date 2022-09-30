@@ -1,0 +1,45 @@
+inherit_from: .rubocop_exclusions.yml
+
+# General configuration
+AllCops:
+  DisabledByDefault: true
+  Include:
+    - 'lib/**/*.rb'
+    - 'spec/**/*.rb'
+  NewCops: enable
+  SuggestExtensions: false
+  TargetRubyVersion: 2.7.5
+
+# Explicit configuration
+Bundler:
+  Enabled: true
+
+Lint:
+  Enabled: true
+
+Layout:
+  Enabled: true
+
+Layout/BlockAlignment:
+  EnforcedStyleAlignWith: start_of_block
+
+Layout/HashAlignment:
+  AllowMultipleStyles: true
+  EnforcedHashRocketStyle: table
+  EnforcedColonStyle: table
+
+Layout/MultilineMethodCallIndentation:
+  Enabled: true
+  EnforcedStyle: indented_relative_to_receiver
+
+Security:
+  Enabled: true
+
+Style/CollectionMethods:
+  Enabled: true
+  PreferredMethods:
+    inject: "inject"
+    collect: "map"
+
+Style/Documentation:
+  Enabled: false
