@@ -54,7 +54,7 @@ describe Afterbanks do
                   headers: {
                     params: { a: :b, c: :d, e: :f }
                   },
-                  timeout: 300
+                  timeout: 900
                 )
                 .and_call_original
 
@@ -97,7 +97,7 @@ describe Afterbanks do
                   method:  :post,
                   url:     "https://api.afterbanks.com/V3/some/endpoint",
                   payload: { :a => :b, :c => :d, :e => :f },
-                  timeout: 300
+                  timeout: 900
                 )
                 .and_call_original
 
