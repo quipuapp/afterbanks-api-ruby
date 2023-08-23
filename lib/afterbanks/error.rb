@@ -1,10 +1,11 @@
 module Afterbanks
   class Error < ::StandardError
-    attr_reader :message, :debug_id, :additional_info
+    attr_reader :message, :debug_id, :long_code, :additional_info
 
-    def initialize(message:, debug_id:, additional_info: nil)
+    def initialize(message:, debug_id:, long_code: nil, additional_info: nil)
       @message = message
       @debug_id = debug_id
+      @long_code = long_code
       @additional_info = additional_info
     end
 
