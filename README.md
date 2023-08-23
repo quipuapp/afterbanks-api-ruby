@@ -33,6 +33,7 @@ You can set a `logger` as well.
 Changelog
 ---------
 
+* v.0.4.2 Include longCode attribute to the Afterbanks::Error class
 * v.0.4.1 Increased timeout from 5min to 15min
 * v.0.4.0 Add new, opt-in error for missing product, and several internal improvements
 * v.0.3.4 Security: upgrade addressable from 2.7.0 to 2.8.0
