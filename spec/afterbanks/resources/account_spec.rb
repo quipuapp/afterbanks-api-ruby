@@ -246,8 +246,9 @@ describe Afterbanks::Account do
           expect { api_call }.to raise_error(
             an_instance_of(Afterbanks::GenericError)
               .and having_attributes(
-                code:    1,
-                message: "Error genérico"
+                code:     1,
+                message:  "Error genérico",
+                debug_id: 'debugerror1'
               )
           )
         end
@@ -268,8 +269,9 @@ describe Afterbanks::Account do
           expect { api_call }.to raise_error(
             an_instance_of(Afterbanks::ServiceUnavailableTemporarilyError)
               .and having_attributes(
-                code:    2,
-                message: "Servicio no disponible ahora mismo"
+                code:     2,
+                message:  "Servicio no disponible ahora mismo",
+                debug_id: 'debugerror2'
               )
           )
         end
@@ -292,7 +294,8 @@ describe Afterbanks::Account do
               .and having_attributes(
                 code:      3,
                 long_code: 3000,
-                message:   "Datos de la conexión inválidos"
+                message:   "Datos de la conexión inválidos",
+                debug_id:  'debugerror3'
               )
           )
         end
@@ -313,8 +316,9 @@ describe Afterbanks::Account do
           expect { api_call }.to raise_error(
             an_instance_of(Afterbanks::AccountIdDoesNotExistError)
               .and having_attributes(
-                code:    4,
-                message: "AccountID no existe"
+                code:     4,
+                message:  "AccountID no existe",
+                debug_id: 'debugerror4'
               )
           )
         end
@@ -335,8 +339,9 @@ describe Afterbanks::Account do
           expect { api_call }.to raise_error(
             an_instance_of(Afterbanks::CutConnectionError)
               .and having_attributes(
-                code:    5,
-                message: "Conexión cortada"
+                code:     5,
+                message:  "Conexión cortada",
+                debug_id: 'debugerror5'
               )
           )
         end
@@ -359,7 +364,8 @@ describe Afterbanks::Account do
               .and having_attributes(
                 code:      6,
                 long_code: 6001,
-                message:   "El usuario debe realizar una acción en el banco"
+                message:   "El usuario debe realizar una acción en el banco",
+                debug_id:  'debugerror6'
               )
           )
         end
