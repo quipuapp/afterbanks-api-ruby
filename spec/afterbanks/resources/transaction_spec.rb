@@ -317,9 +317,10 @@ describe Afterbanks::Transaction do
           expect { api_call }.to raise_error(
             an_instance_of(Afterbanks::ConnectionDataError)
               .and having_attributes(
-                code:     3,
-                message:  "Datos de la conexión inválidos",
-                debug_id: 'debugerror3'
+                code:      3,
+                long_code: 3000,
+                message:   "Datos de la conexión inválidos",
+                debug_id:  'debugerror3'
               )
           )
         end
@@ -386,9 +387,10 @@ describe Afterbanks::Transaction do
           expect { api_call }.to raise_error(
             an_instance_of(Afterbanks::HumanActionNeededError)
               .and having_attributes(
-                code:     6,
-                message:  "El usuario debe realizar una acción en el banco",
-                debug_id: 'debugerror6'
+                code:      6,
+                long_code: 6001,
+                message:   "El usuario debe realizar una acción en el banco",
+                debug_id:  'debugerror6'
               )
           )
         end
@@ -411,6 +413,7 @@ describe Afterbanks::Transaction do
               an_instance_of(Afterbanks::TwoStepAuthenticationError)
                 .and having_attributes(
                   code:            50,
+                  long_code:       50002,
                   message:         "A bank te ha enviado un código",
                   debug_id:        'debugerror50tsa',
                   additional_info: {
@@ -438,6 +441,7 @@ describe Afterbanks::Transaction do
               an_instance_of(Afterbanks::AccountIdNeededError)
                 .and having_attributes(
                   code:            50,
+                  long_code:       50001,
                   message:         "Escoge una cuenta",
                   debug_id:        'debugerror50accid',
                   additional_info: [

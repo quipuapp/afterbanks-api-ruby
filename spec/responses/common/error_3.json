@@ -1,4 +1,5 @@
 {
   "message": "Datos de la conexión inválidos",
-  "code": 3
+  "code": 3,
+  "longCode": 3000
 }

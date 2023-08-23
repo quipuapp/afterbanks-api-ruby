@@ -1,6 +1,7 @@
 {
   "message": "Escoge una cuenta",
   "code": 50,
+  "longCode": 50001,
   "additional_info": [
     {
       "account_id": 0,

@@ -85,10 +85,15 @@ module Afterbanks
       return unless response_body.is_a?(Hash)
 
       code = response_body['code']
+      long_code = response_body['longCode']
       message = response_body['message']
       additional_info = response_body['additional_info']
 
       error_info = { message: message, debug_id: debug_id }
+
+      if !long_code.nil?
+        error_info[:long_code] = long_code
+      end
 
       case code
       when 1
